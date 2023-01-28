@@ -1,14 +1,20 @@
-# Gator-Rate
+# UForum
 
+## The one place where Gators can discuss general things such as:
+- Current events and news relevant to the university and the students.
+- Study tips and resources for different courses.
+- Study meet-ups for students looking for a class partner.
+- Career advice and job opportunities for students.
+- Social events and clubs on campus.
+- Mental health and well-being support.
+- Tips for adjusting to university life and making new friends.
+- Discussions on diversity, equity, and inclusion.
+- Sharing information about research opportunities and internships.
+- Discussions on sustainability and environmental impact of university.
+- Sharing information on housing, transportation, and local resources.
 
--  The ultimate compilation of University of Florida ratings from
-    classes to professors. The website is powered by a combination of
-    golang and angular and stores data on an mysqlite server. 
-    Students can submit ratings through an interactive webpage as well
-    as see other student reviews. To verify legitimacy, accounts must be made
-    with ufl.edu emails.
+### Current Issue: Implementing a log-in page
 
-- The project is being developed by 4 members consisting of 2 backend and 2 front end developers.
-
-    Brian Nielsen and Christian Scaff are in charge of the frontend whereas
-    Fernando Sckaff and Dylan Zhao are in charge of the backend.
+### Developers
+- Front-End: Brian Nielsen, Christian Scaff
+- Back-End: Dylan Zhao, Fernando Sckaff
