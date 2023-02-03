@@ -13,7 +13,7 @@
 - Discussions on sustainability and environmental impact of university.
 - Sharing information on housing, transportation, and local resources.
 
-### Current Issue: Implementing a log-in page
+### Current Issue: Implementing a log-in page, connecting it with SQL databased
 
 ### Developers
 - Front-End: Brian Nielsen, Christian Scaff
