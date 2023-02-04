@@ -27,6 +27,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -47,6 +48,7 @@ var posts = []post{
 
 func main() {
 	router := gin.Default()
+	router.Use(cors.Default())
 	router.GET("/posts", getPosts)
 	router.GET("/posts/:id", getPostByID)
 	router.POST("/posts", postNew)
