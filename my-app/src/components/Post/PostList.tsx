@@ -24,7 +24,7 @@ type myStates = {
 }
 
 export default class PostList extends Component<{}, myStates> {
-    constructor(props: any) {
+    constructor(props: Array<any>) {
         super(props);
         this.state = {
             current_posts: [],
