@@ -13,20 +13,23 @@ Functions:
 
 	- postNew:
 		$ curl http://localhost:8080/posts \
-		--include \
-		--header "Content-Type: application/json" \
-		--request "POST" \
-		--data '{"id": "4", "user": "BeeBop57","title": "Why is Sckaff > Scaff?","body": "Excepteur sint occaecat cupidatat non proident."}'
+		  --include \
+		  --header "Content-Type: application/json" \
+		  --request "POST" \
+		  --data '{"id": "4", "user": "BeeBop57","title": "Why is Sckaff > Scaff?","body": "Excepteur sint occaecat cupidatat non proident."}'
 
 	- getPostByID:
 		$ curl http://localhost:8080/posts/2
+
+	- deletePostByID
+		$ curl -X DELETE http://localhost:8080/posts/2
 */
 
 package main
 
 import (
-	"net/http"
 	"fmt"
+	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -58,10 +61,10 @@ func main() {
 	router.Run("localhost:8080")
 }
 
-//Helper function to remove element from array
-//Taken from https://stackoverflow.com/questions/37334119/how-to-delete-an-element-from-a-slice-in-golang
+// Helper function to remove element from array
+// Taken from https://stackoverflow.com/questions/37334119/how-to-delete-an-element-from-a-slice-in-golang
 func RemoveIndex(s []post, index int) []post {
-    return append(s[:index], s[index+1:]...)
+	return append(s[:index], s[index+1:]...)
 }
 
 // getPosts responds with the list of all posts as JSON.
@@ -85,8 +88,8 @@ func getPostByID(c *gin.Context) {
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "post not found"})
 }
 
-// getPostByID locates the album whose ID value matches the id
-// parameter sent by the client, then returns that post as a response.
+// deletePostByID will remove the post based on the post's ID
+// anywhere on the database
 func deletePostByID(c *gin.Context) {
 	fmt.Println("ran delete function")
 	id := c.Param("id")
