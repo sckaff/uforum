@@ -47,10 +47,15 @@ export const PostHome = () => {
     })
 
     const latest_posts = posts.map((post, index, row) => {
+        const post_url = 'http://localhost:3000/post/' + post.id;
         const single_post = 
             <ListItem alignItems='flex-start'>
                 <ListItemText
-                    primary={post.title}
+                    primary={
+                        <React.Fragment>
+                            <a href={post_url}>{post.title}</a>
+                        </React.Fragment>
+                    }
                     secondary={
                         <React.Fragment>
                             <Typography
