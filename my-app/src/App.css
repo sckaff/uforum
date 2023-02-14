@@ -1,3 +1,26 @@
 .wrapper {
   padding: 20px;
 }
+
+.loginPage {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background-image: url("https://www.greatvaluecolleges.net/wp-content/uploads/2015/05/957441704_1338dc75f6_b-1024x758.jpg");
+  background-position: center; 
+  background-repeat: no-repeat; 
+  background-size: cover; 
+}
+.card {
+  /* Change background color */
+  background-color: white;
+
+  /* Add border */
+  border: 1px solid #bacdd8;
+
+  /* Add space between the border and the content */
+  padding: 8px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  border-radius: 12px;
+}
