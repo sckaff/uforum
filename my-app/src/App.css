@@ -7,10 +7,9 @@
   min-height: 100vh;
   align-items: center;
   justify-content: center;
-  background-image: url("https://www.greatvaluecolleges.net/wp-content/uploads/2015/05/957441704_1338dc75f6_b-1024x758.jpg");
-  background-position: center; 
-  background-repeat: no-repeat; 
-  background-size: cover; 
+  background-color: #0093E9;
+  background-image: linear-gradient(160deg, #0093E9 0%, #fe8327 50%, #ffffff 100%);
+  background-size: cover;
 }
 .card {
   /* Change background color */
