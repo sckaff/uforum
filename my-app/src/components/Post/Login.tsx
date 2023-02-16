@@ -1,19 +1,38 @@
 import { Button } from '@mui/material';
+import { User } from './User';
 import React, { useState } from "react";
 import InputLabel from '@mui/material/InputLabel';
 import Input from '@mui/material/Input';
 
 
 export const Login = () => {
-      
-    type myStates = {
-          email: string,
-          passWord: string,
-    }
+
+    let userList: User[];
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      console.log(email);
+      console.log("Email:" + email);
+      console.log("Password:" + passWord);
+
+        fetch('http://localhost:8080/user') //Need User database implemented in backend
+        .then((response) => response.json())
+        .then((json) => {
+         let tempUserList: User[] = json;
+          console.log(tempUserList);
+          userList = tempUserList;
+      })
+      for (let i = 0; i < userList.length; i++) { //Run through lists of users to find matching user and password for entry
+          if (userList[i].email === email){
+            //Check Password Match
+            if (userList[i].password === passWord){
+              //Initiate Log In
+            } else {
+              //Output Error State 
+            }
+          } else {
+              //Output Error State 
+          }
+      }
     }
     
     const [email, setEmail] = useState('');
@@ -35,6 +54,8 @@ export const Login = () => {
                   <Input
                     id="filled-adornment-password"
                     type={showPassword ? 'text' : 'password'}
+                    value={passWord}
+                    onChange={(event) => setPassWord(event.target.value)}
                   />
                 <br/><br/>
                 <Button variant="contained" type="submit">Log In</Button>

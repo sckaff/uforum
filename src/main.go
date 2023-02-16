@@ -43,6 +43,11 @@ type post struct {
 	Body  string `json:"body"`
 }
 
+type user struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 // albums slice to seed record album data.
 var posts = []post{
 	{ID: "1", User: "John33", Title: "RTS Bus Stop", Body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
