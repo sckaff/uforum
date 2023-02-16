@@ -14,15 +14,15 @@ const HomeIcon = createSvgIcon(
 );
 
 export const Homebar = () => {
-
+    
     return (
         <>
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="fixed">
                 <Toolbar>
-                    <a href='http://localhost:3000/home'><Button color="inherit" startIcon={<HomeIcon />}>Home</Button></a>
-                    <a href='http://localhost:3000/'><Button color="inherit" startIcon={<SendIcon />}>Create/View</Button></a>
-                    <a href='http://localhost:3000/login'><Button color="inherit">Login</Button></a>
+                    <Button color="inherit" startIcon={<HomeIcon />} href="http://localhost:3000/home">Home</Button>
+                    <Button color="inherit" startIcon={<SendIcon />} href="http://localhost:3000/">Create/View</Button>
+                    <Button color="inherit" href="http://localhost:3000/login">Login</Button>
                 </Toolbar>
             </AppBar>
         </Box>
