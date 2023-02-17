@@ -17,7 +17,7 @@ export const PostView = (props: any) => {
             setPost(new_post);
             console.log(new_post);
         })
-    })
+    }, [])
 
     let html_data: JSX.Element;
     if (post === undefined) {

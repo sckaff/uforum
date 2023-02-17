@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import DeleteIcon from '@mui/icons-material/Delete';
+import './CSS/GenericPadding.css';
 
 type myStates = {
     current_posts: Post[], 
@@ -156,57 +157,57 @@ export default class PostList extends Component<{}, myStates> {
             );
         })
         return(
-            <>
-            <div>{htmlData}</div>
-            <div>
-                <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
-                        Create a post! 
-                        <br/>
-                        <TextField 
-                            sx={formSpacing}
-                            onChange={(e) => this.setState({name: e.target.value})}
-                            value={this.state.name}
-                            label="Name"
-                            variant="outlined"
-                            required
-                            fullWidth
-                            error={this.state.nameError}
-                        />
-                        <TextField 
-                            sx={formSpacing}
-                            onChange={(e) => this.setState({title: e.target.value})}
-                            value={this.state.title}
-                            label="Title"
-                            variant="outlined"
-                            required
-                            fullWidth
-                            error={this.state.titleError}
-                        />
-                        <TextField 
-                            sx={formSpacing}
-                            onChange={(e) => this.setState({content: e.target.value})}
-                            value={this.state.content}
-                            label="Content"
-                            variant="outlined"
-                            required
-                            fullWidth
-                            error={this.state.contentError}
-                            multiline
-                            rows={4}
-                        />
-                        <Button 
-                            type="submit" 
-                            color="primary" 
-                            variant="contained"
-                            endIcon={<KeyboardArrowRightIcon />}
-                        >
-                        Submit
-                        </Button>
-                </form>
-                <br/>
-            </div>
-            
-            </>
+            <body className="pad">
+                <div>{htmlData}</div>
+                <div>
+                    <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+                            Create a post! 
+                            <br/>
+                            <TextField 
+                                sx={formSpacing}
+                                onChange={(e) => this.setState({name: e.target.value})}
+                                value={this.state.name}
+                                label="Name"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                error={this.state.nameError}
+                            />
+                            <TextField 
+                                sx={formSpacing}
+                                onChange={(e) => this.setState({title: e.target.value})}
+                                value={this.state.title}
+                                label="Title"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                error={this.state.titleError}
+                            />
+                            <TextField 
+                                sx={formSpacing}
+                                onChange={(e) => this.setState({content: e.target.value})}
+                                value={this.state.content}
+                                label="Content"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                error={this.state.contentError}
+                                multiline
+                                rows={4}
+                            />
+                            <Button 
+                                type="submit" 
+                                color="primary" 
+                                variant="contained"
+                                endIcon={<KeyboardArrowRightIcon />}
+                            >
+                            Submit
+                            </Button>
+                    </form>
+                    <br/>
+                </div>
+                
+            </body>
         )
     }
 }

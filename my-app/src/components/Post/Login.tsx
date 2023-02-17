@@ -3,6 +3,7 @@ import { User } from './User';
 import React, { useState } from "react";
 import InputLabel from '@mui/material/InputLabel';
 import Input from '@mui/material/Input';
+import './CSS/Login.css'
 
 
 export const Login = () => {
@@ -40,7 +41,7 @@ export const Login = () => {
     const [showPassword] = React.useState(false);
 
     return (
-        <div className="loginPage">
+        <body className="login">
             <div className="card">
                 <form onSubmit={handleSubmit}>
                 <InputLabel htmlFor="UFL_email">UFL Email</InputLabel>
@@ -61,6 +62,6 @@ export const Login = () => {
                 <Button variant="contained" type="submit">Log In</Button>
                 </form>
             </div>
-        </div>
+        </body>
     )
 }

@@ -32,7 +32,7 @@ export const PostHome = () => {
             setPosts(new_posts);
             console.log(new_posts);
         })
-    });
+    }, []);
 
     const html_data = posts.map((post) => {
         return(
