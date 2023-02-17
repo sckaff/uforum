@@ -1,0 +1,27 @@
+
+1. go to site:  https://www.sqlite.org/
+download precompiled binaries 64 bit and if uses windows download sqlite tools win32
+2. run sqlite3.exe 
+C:\Users\dylan\GolangStuff\golangProject\sqlite3
+.open .\uf_forum.db
+sqlite> CREATE TABLE USERS (
+   userid INTEGER PRIMARY KEY AUTOINCREMENT,
+   uf_email TEXT NOT NULL UNIQUE,
+   password TEXT NOT NULL,
+   nick_name  TEXT,
+   first_name TEXT NOT NULL,
+   last_name TEXT NOT NULL,
+   creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+   profile_picture BLOB
+);
+
+CREATE TABLE POSTS(
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
+   title TEXT NOT NULL
+);
+
+insert into posts (title) VALUES("testpost");
+
+select * from USERS
+
+
