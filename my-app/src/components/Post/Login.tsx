@@ -1,67 +1,97 @@
+import { Navigate  } from "react-router-dom";
+import AuthService from "../services/auth.service";
+import InputLabel from '@mui/material/InputLabel';
+import React, { Component } from "react";
+import Input from '@mui/material/Input';
 import { Button } from '@mui/material';
 import { User } from './User';
-import React, { useState } from "react";
-import InputLabel from '@mui/material/InputLabel';
-import Input from '@mui/material/Input';
+import * as Yup from "yup";
 import './CSS/Login.css'
 
 
-export const Login = () => {
+type State = {
+  redirect: string | null,
+  username: string,
+  password: string,
+  loading: boolean,
+  message: string,
+  showPassword: boolean,
+};
 
-    let userList: User[];
+type Props = {};
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+export default class Login extends Component<Props, State>{
+  constructor(props: Props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.state = {
+      redirect: null,
+      username: "",
+      password: "",
+      loading: false,
+      message: "",
+      showPassword: false,
+    };
+  }
+
+
+  handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      console.log("Email:" + email);
-      console.log("Password:" + passWord);
+      console.log("Username:" + this.state.username);
+      console.log("password:" + this.state.password);
 
-        fetch('http://localhost:8080/user') //Need User database implemented in backend
-        .then((response) => response.json())
-        .then((json) => {
-         let tempUserList: User[] = json;
-          console.log(tempUserList);
-          userList = tempUserList;
-      })
-      for (let i = 0; i < userList.length; i++) { //Run through lists of users to find matching user and password for entry
-          if (userList[i].email === email){
-            //Check Password Match
-            if (userList[i].password === passWord){
-              //Initiate Log In
-            } else {
-              //Output Error State 
-            }
-          } else {
-              //Output Error State 
-          }
-      }
+      this.setState({
+        message: "",
+        loading: true
+      });
+  
+      AuthService.login(this.state.username, this.state.password).then(
+        () => {
+          this.setState({
+            redirect: "/profile"
+          });  
+        },
+        error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+  
+          this.setState({
+            loading: false,
+            message: resMessage
+          });
+        }
+      );
     }
-    
-    const [email, setEmail] = useState('');
-    const [passWord, setPassWord] = useState('');
-    const [showPassword] = React.useState(false);
 
-    return (
-        <body className="login">
-            <div className="card">
-                <form onSubmit={handleSubmit}>
-                <InputLabel htmlFor="UFL_email">UFL Email</InputLabel>
-                <Input
-                    id="UFL_email"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    />
-                    <br/><br/>
-                <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
+    render(){     
+        return (
+          <body className="login">
+              <div className="card">
+                  <form onSubmit={this.handleSubmit}>
+                  <InputLabel htmlFor="Username">Username</InputLabel>
                   <Input
-                    id="filled-adornment-password"
-                    type={showPassword ? 'text' : 'password'}
-                    value={passWord}
-                    onChange={(event) => setPassWord(event.target.value)}
-                  />
-                <br/><br/>
-                <Button variant="contained" type="submit">Log In</Button>
-                </form>
-            </div>
-        </body>
-    )
+                      id="Username"
+                      onChange={(e) => this.setState({username: e.target.value})}
+                      value={this.state.username}
+                      />
+                      <br/><br/>
+                  <InputLabel htmlFor="filled-adornment-password">password</InputLabel>
+                    <Input
+                      id="filled-adornment-password"
+                      type={this.state.showPassword ? 'text' : 'password'}
+                      onChange={(e) => this.setState({password: e.target.value})}
+                      value={this.state.password}
+                    />
+                  <br/><br/>
+                  <Button variant="contained" type="submit">Log In</Button>
+                  </form>
+              </div>
+          </body>
+      );
+  }
 }

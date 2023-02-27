@@ -20,6 +20,8 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+import './CSSComponents/PostHome.css';
+
 
 export const PostHome = () => {
     const [posts, setPosts] = useState<Array<Post>>([]);
@@ -32,7 +34,7 @@ export const PostHome = () => {
             setPosts(new_posts);
             console.log(new_posts);
         })
-    }, []);
+    });
 
     const html_data = posts.map((post) => {
         return(
@@ -92,7 +94,7 @@ export const PostHome = () => {
     })
 
     return(
-        <>
+        <body className="PostHome">
         <Typography variant='h3'>Forum list</Typography>
         <MuiAccordion defaultExpanded>
             <MuiAccordionSummary expandIcon={<ExpandMore/>}>
@@ -143,6 +145,6 @@ export const PostHome = () => {
                 See more
             </Button>
         </Card>
-        </>
+        </body>
     )
 }
