@@ -5,6 +5,7 @@ import { PostHome } from './components/Post/PostHome';
 import { PostView } from './components/Post/PostView';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import  Login from './components/Post/Login';
+import  Register from './components/Post/Register';
 import SendIcon from '@mui/icons-material/Send';
 import HomeIcon from '@mui/icons-material/Home';
 import { Profile } from './components/Post/Profile';
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<PostList />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/home" element={<PostHome />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/post/:id" element={<PostView />} />

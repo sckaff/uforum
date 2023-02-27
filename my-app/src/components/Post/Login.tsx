@@ -1,9 +1,9 @@
-import { Navigate  } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import AuthService from "../services/auth.service";
 import InputLabel from '@mui/material/InputLabel';
 import React, { Component } from "react";
 import Input from '@mui/material/Input';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { User } from './User';
 import * as Yup from "yup";
 import './CSS/Login.css'
@@ -91,6 +91,13 @@ export default class Login extends Component<Props, State>{
                   <Button variant="contained" type="submit">Log In</Button>
                   </form>
               </div>
+              <body>
+                <div className="footer">
+                  <Link to="/Register">
+                    <Typography>Don't have an account? Register here!</Typography>
+                  </Link>
+                </div>
+              </body>
           </body>
       );
   }
