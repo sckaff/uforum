@@ -4,8 +4,6 @@ import InputLabel from '@mui/material/InputLabel';
 import React, { Component } from "react";
 import Input from '@mui/material/Input';
 import { Button, Typography } from '@mui/material';
-import { User } from './User';
-import * as Yup from "yup";
 import './CSS/Login.css'
 
 

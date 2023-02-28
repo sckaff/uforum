@@ -8,7 +8,7 @@ import  Login from './components/Post/Login';
 import  Register from './components/Post/Register';
 import SendIcon from '@mui/icons-material/Send';
 import HomeIcon from '@mui/icons-material/Home';
-import { Profile } from './components/Post/Profile';
+import Profile from './components/Post/Profile';
 import { Homebar } from './components/Post/Homebar';
 
 
