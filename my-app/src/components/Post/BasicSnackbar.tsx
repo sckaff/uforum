@@ -4,7 +4,14 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-export default function SnackbarNotification(props: any) {
+type Props = {
+  open: boolean,
+  hide: () => void,
+  message: string,
+}
+
+
+export default function SnackbarNotification(props: Props) {
 
     const action = (
         <React.Fragment>
