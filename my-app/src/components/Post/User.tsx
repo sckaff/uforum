@@ -1,7 +1,9 @@
 
 interface User {
+    id: string;
+    username: string;
     email: string;
-    password: string;
+    accessToken: string;
 }
 
-export type { User }
+export type { User };

@@ -4,8 +4,8 @@ import InputLabel from '@mui/material/InputLabel';
 import React, { Component } from "react";
 import Input from '@mui/material/Input';
 import { Button, Typography } from '@mui/material';
-import { User } from './User';
-import * as Yup from "yup";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import './CSS/Login.css'
 
 
@@ -16,6 +16,7 @@ type State = {
   loading: boolean,
   message: string,
   showPassword: boolean,
+  open: boolean,
 };
 
 type Props = {};
@@ -32,9 +33,17 @@ export default class Login extends Component<Props, State>{
       loading: false,
       message: "",
       showPassword: false,
+      open: false,
     };
   }
 
+  componentDidMount() {
+    const currentUser = AuthService.getCurrentUser();
+
+    if (currentUser) {
+      this.setState({ redirect: "/profile" });
+    };
+  }
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
@@ -59,14 +68,30 @@ export default class Login extends Component<Props, State>{
               error.response.data.message) ||
             error.message ||
             error.toString();
-  
+            
           this.setState({
             loading: false,
             message: resMessage
           });
+          this.handleError();
         }
       );
     }
+
+     handleError = () => {
+      this.setState({
+        open: true,
+      });  
+    };
+  
+     handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      this.setState({
+        open: false,
+      });  
+    };
 
     render(){     
         return (
@@ -91,6 +116,13 @@ export default class Login extends Component<Props, State>{
                   <Button variant="contained" type="submit">Log In</Button>
                   </form>
               </div>
+              <body>
+                <Snackbar open={this.state.open} autoHideDuration={6000} onClose={this.handleClose}>
+                  <Alert onClose={this.handleClose} severity="error" sx={{ width: '100%' }}>
+                    Username or Password was incorrect!
+                  </Alert>
+                </Snackbar>
+              </body>
               <body>
                 <div className="footer">
                   <Link to="/Register">
