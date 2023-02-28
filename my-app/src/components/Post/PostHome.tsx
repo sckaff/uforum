@@ -20,7 +20,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import './CSS/GenericPadding.css';
+import { Link } from 'react-router-dom';
 
 
 export const PostHome = () => {
@@ -49,13 +49,15 @@ export const PostHome = () => {
     })
 
     const latest_posts = posts.map((post, index, row) => {
-        const post_url = 'http://localhost:3000/post/' + post.id;
+        const post_url = '/post/' + post.id;
         const single_post = 
             <ListItem alignItems='flex-start'>
                 <ListItemText
                     primary={
                         <React.Fragment>
-                            <a href={post_url}>{post.title}</a>
+                            <Link to={post_url}>
+                                <Typography className='url_styling'>{post.title}</Typography>
+                            </Link>
                         </React.Fragment>
                     }
                     secondary={
@@ -96,7 +98,7 @@ export const PostHome = () => {
     return(
         <body className="pad">
         <Typography variant='h3'>Forum list</Typography>
-        <MuiAccordion defaultExpanded>
+        <MuiAccordion data-cy="pop_cat" defaultExpanded>
             <MuiAccordionSummary expandIcon={<ExpandMore/>}>
                 <Typography>Popular Categories</Typography>
             </MuiAccordionSummary>
@@ -105,7 +107,7 @@ export const PostHome = () => {
             </MuiAccordionDetails>
         </MuiAccordion>
         
-        <MuiAccordion defaultExpanded>
+        <MuiAccordion data-cy="class_cat" defaultExpanded>
             <MuiAccordionSummary expandIcon={<ExpandMore/>}>
                 <Typography>Classwork Related</Typography>
             </MuiAccordionSummary>
@@ -114,7 +116,7 @@ export const PostHome = () => {
             </MuiAccordionDetails>
         </MuiAccordion>
 
-        <MuiAccordion defaultExpanded>
+        <MuiAccordion data-cy="campus_cat" defaultExpanded>
             <MuiAccordionSummary expandIcon={<ExpandMore/>}>
                 <Typography>Campus Related</Typography>
             </MuiAccordionSummary>
@@ -123,7 +125,7 @@ export const PostHome = () => {
             </MuiAccordionDetails>
         </MuiAccordion>
 
-        <MuiAccordion defaultExpanded>
+        <MuiAccordion data-cy="other_cat" defaultExpanded>
             <MuiAccordionSummary expandIcon={<ExpandMore/>}>
                 <Typography>Other</Typography>
             </MuiAccordionSummary>
@@ -141,9 +143,6 @@ export const PostHome = () => {
                     {latest_posts}
                 </List>
             </CardContent>
-            <Button variant="contained">
-                See more
-            </Button>
         </Card>
         </body>
     )

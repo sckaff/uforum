@@ -113,12 +113,12 @@ export default class Login extends Component<Props, State>{
                       value={this.state.password}
                     />
                   <br/><br/>
-                  <Button variant="contained" type="submit">Log In</Button>
+                  <Button data-cy="login_button" variant="contained" type="submit">Log In</Button>
                   </form>
               </div>
               <body>
                 <Snackbar open={this.state.open} autoHideDuration={6000} onClose={this.handleClose}>
-                  <Alert onClose={this.handleClose} severity="error" sx={{ width: '100%' }}>
+                  <Alert data-cy="alert" onClose={this.handleClose} severity="error" sx={{ width: '100%' }}>
                     Username or Password was incorrect!
                   </Alert>
                 </Snackbar>
@@ -126,7 +126,7 @@ export default class Login extends Component<Props, State>{
               <body>
                 <div className="footer">
                   <Link to="/Register">
-                    <Typography>Don't have an account? Register here!</Typography>
+                    <Typography className="url_styling">Don't have an account? Register here!</Typography>
                   </Link>
                 </div>
               </body>

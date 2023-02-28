@@ -104,7 +104,7 @@ export default class Register extends Component<Props, State>{
               <body>
                 <div className="footer">
                   <Link to="/Login">
-                    <Typography>Already have an account? Login here!</Typography>
+                    <Typography className="url_styling">Already have an account? Login here!</Typography>
                   </Link>
                 </div>
               </body>

@@ -5,8 +5,8 @@ import { Post } from "./Post";
 import { jsx } from "@emotion/react";
 
 export const PostView = (props: any) => {
-    let { id } = useParams<{ id: string }>();
 
+    let { id } = useParams<{ id: string }>();
     const [post, setPost] = useState<Post>();
 
     useEffect(() => {

@@ -10,7 +10,6 @@ import { createSvgIcon } from '@mui/material/utils';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 
-
 const HomeIcon = createSvgIcon(
     <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>,
     'Home',
