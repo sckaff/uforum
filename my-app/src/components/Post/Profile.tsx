@@ -32,7 +32,7 @@ export default class Profile extends Component<Props, State> {
       componentDidMount() {
         const currentUser = AuthService.getCurrentUser();
     
-        if (!currentUser) this.setState({ redirect: "/home" });
+        if (!currentUser) this.setState({ redirect: "/login" });
         this.setState({ currentUser: currentUser, userReady: true })
       }
     
