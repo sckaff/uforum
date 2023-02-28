@@ -6,22 +6,25 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { IconButton, TextField } from "@mui/material";
+import BasicSnackbar from './BasicSnackbar'
 import { makeStyles } from "@mui/material/styles";
 import { ClassNames } from "@emotion/react";
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import DeleteIcon from '@mui/icons-material/Delete';
-import './CSSComponents/PostList.css';
+import './CSS/GenericPadding.css';
 
 type myStates = {
     current_posts: Post[], 
     name: string, 
+    noti_message: string,
     title: string, 
     content: string,
     nameError: boolean,
     titleError: boolean,
     contentError: boolean,
+    dispNotification: boolean,
 }
 
 export default class PostList extends Component<{}, myStates> {
@@ -32,12 +35,21 @@ export default class PostList extends Component<{}, myStates> {
             name: "",
             title: "",
             content: "",
+            noti_message: "b",
             nameError: false,
             titleError: false,
             contentError: false,
+            dispNotification: false,
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleNotifClose = this.handleNotifClose.bind(this);
+    }
+
+    handleNotifClose = () => {
+        this.setState({
+            dispNotification: false
+        })
     }
 
     handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -51,17 +63,23 @@ export default class PostList extends Component<{}, myStates> {
         //Catch errors for unfilled fields
         if(this.state.name === '') {
             this.setState({
-                nameError: true
+                nameError: true,
+                noti_message: "Invalid post!",
+                dispNotification: true,
             })
         }
         if(this.state.title === '') {
             this.setState({
-                titleError: true
+                titleError: true,
+                noti_message: "Invalid post!",
+                dispNotification: true,
             })
         }
         if(this.state.content === '') {
             this.setState({
-                contentError: true
+                contentError: true,
+                noti_message: "Invalid post!",
+                dispNotification: true,
             })
         }
         if (this.state.name && this.state.content && this.state.title) //If form correctly submitted
@@ -75,23 +93,29 @@ export default class PostList extends Component<{}, myStates> {
                 title: this.state.title,
                 body: this.state.content
             }
-            this.setState({
-                current_posts: [...this.state.current_posts, new_post]
-            })
             let json_post: any = JSON.stringify(new_post);
             fetch('http://localhost:8080/posts', {
                 method: "POST",
                 body: json_post,})
                 .then((response) => {
-                    if(response.status === 200)
+                    if(response.status === 201)
                     {
                         this.setState({
+                            noti_message: "Successfully created post!",
+                            current_posts: [...this.state.current_posts, new_post],
+                            dispNotification: true,
                             name: "",
                             title: "",
                             content: "",
                         })
                     }
-                }).catch((err) => {console.log(err)})
+                }).catch((err) => {
+                    console.log(err)
+                    this.setState({
+                        noti_message: "Error connecting to server!",
+                        dispNotification: true,
+                    })
+                })
         }
     }
 
@@ -108,7 +132,9 @@ export default class PostList extends Component<{}, myStates> {
                 console.log('testy')
                 console.log(json)
                 this.setState({
-                    current_posts: updated_posts
+                    noti_message: "Successfully deleted post!",
+                    current_posts: updated_posts,
+                    dispNotification: true,
                 })
             })
     }
@@ -133,9 +159,12 @@ export default class PostList extends Component<{}, myStates> {
         }
 
         const htmlData = this.state.current_posts.map((post) => {
+            let accordion_id: string = post.user + '_accordion'
+            let delete_id: string = post.user + '_delete'
             return (
                 <Accordion key={post.id}>
                     <AccordionSummary
+                    data-cy={accordion_id}
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
@@ -148,7 +177,7 @@ export default class PostList extends Component<{}, myStates> {
                         <Typography>
                             {post.body}
                             <br/>
-                            <IconButton aria-label="delete" onClick={() => this.handleDelete(post.id)}>
+                            <IconButton data-cy={delete_id} aria-label="delete" onClick={() => this.handleDelete(post.id)}>
                                 <DeleteIcon/>
                             </IconButton>
                     </Typography>
@@ -157,56 +186,61 @@ export default class PostList extends Component<{}, myStates> {
             );
         })
         return(
-            <body className="PostList">
-            <div>{htmlData}</div>
+            <body className="pad">
+                <div>{htmlData}</div>
                 <div>
-                <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
-                        Create a post! 
-                        <br/>
-                        <TextField 
-                            sx={formSpacing}
-                            onChange={(e) => this.setState({name: e.target.value})}
-                            value={this.state.name}
-                            label="Name"
-                            variant="outlined"
-                            required
-                            fullWidth
-                            error={this.state.nameError}
-                        />
-                        <TextField 
-                            sx={formSpacing}
-                            onChange={(e) => this.setState({title: e.target.value})}
-                            value={this.state.title}
-                            label="Title"
-                            variant="outlined"
-                            required
-                            fullWidth
-                            error={this.state.titleError}
-                        />
-                        <TextField 
-                            sx={formSpacing}
-                            onChange={(e) => this.setState({content: e.target.value})}
-                            value={this.state.content}
-                            label="Content"
-                            variant="outlined"
-                            required
-                            fullWidth
-                            error={this.state.contentError}
-                            multiline
-                            rows={4}
-                        />
-                        <Button 
-                            type="submit" 
-                            color="primary" 
-                            variant="contained"
-                            endIcon={<KeyboardArrowRightIcon />}
-                        >
-                        Submit
-                        </Button>
-                </form>
-                <br/>
+                    <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+                            Create a post! 
+                            <br/>
+                            <TextField 
+                                data-cy="name_field"
+                                sx={formSpacing}
+                                onChange={(e) => this.setState({name: e.target.value})}
+                                value={this.state.name}
+                                label="Name"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                error={this.state.nameError}
+                            />
+                            <TextField 
+                                data-cy="title_field"
+                                sx={formSpacing}
+                                onChange={(e) => this.setState({title: e.target.value})}
+                                value={this.state.title}
+                                label="Title"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                error={this.state.titleError}
+                            />
+                            <TextField 
+                                data-cy="content_field"
+                                sx={formSpacing}
+                                onChange={(e) => this.setState({content: e.target.value})}
+                                value={this.state.content}
+                                label="Content"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                error={this.state.contentError}
+                                multiline
+                                rows={4}
+                            />
+                            <Button 
+                                data-cy="submit"
+                                type="submit" 
+                                color="primary" 
+                                variant="contained"
+                                endIcon={<KeyboardArrowRightIcon />}
+                            >
+                            Submit
+                            </Button>
+                    </form>
+                    <br/>
                 </div>
-                </body> 
+                <BasicSnackbar message={this.state.noti_message} open={this.state.dispNotification} hide={this.handleNotifClose}/>
+            </body> 
         )
     }
 }
