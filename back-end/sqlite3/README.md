@@ -38,5 +38,5 @@ Go to site:
 - Run terminal: 
     `run sqlite3.exe`
 - Check if it works - go to sqlite3 folder and run:
-    `sqlite3 .\uf_forum.db` (Mac) <br\>
+    `sqlite3 .\uf_forum.db` (Mac) \
     `.open .\uf_forum.db` (Windows)

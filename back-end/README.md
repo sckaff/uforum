@@ -73,5 +73,5 @@ AFTER IMPORTING PACKAGES:
 
 ## Recurrent:
 START SERVER:
-    `go mod tidy (if needed)`<br\>
+    `go mod tidy (if needed)` \
     `go run main.go`
