@@ -1,29 +1,29 @@
 # API Documentation
 ## USER FUNCTIONS:
 * newUser()
-    - Test
+    - Creates a new user and new user is inserted in the database.
 * getUser()
-    - Test
+    - Returns the user based on ID.
 * getUsers()
-    - Test
+    - Returns all the users in the database.
 * updateProfile()
-    - Test
+    - Updates the profile of the user. Can only be done by User or Admin
 * deleteUserByID()
-    - Test
+    - Deletes the user based on the User's ID. (OBS - might change to UNIQUE Username)
 * validateUser()
-    - Test
+    - Validates the user log-in attempt. (verify username and password)
 
 ## POST FUNCTIONS:
 * getPosts()
-    - Test
+    - Returns the JSON of all posts in the database.
 * createPost()
-    - Test
+    - Creates a new post and adds it to the database
 * getPost()
-    - Test
+    - Returns a specific post based on index
 * updatePost()
-    - Test
+    - Updates the post. Only the post creator (or admin) can change the post.
 * deletePostByID()
-    - Test
+    - Deletes the post from the database based on the ID
 
 ---
 
@@ -73,5 +73,5 @@ AFTER IMPORTING PACKAGES:
 
 ## Recurrent:
 START SERVER: \
-    `go mod tidy (if needed)` \
+    `go mod tidy` \
     `go run main.go`
