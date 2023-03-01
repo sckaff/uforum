@@ -1,5 +1,5 @@
 # API Documentation
-## USER FUNCTIONS:
+## User Functions:
 * newUser()
     - Creates a new user and new user is inserted in the database.
 * getUser()
@@ -13,7 +13,7 @@
 * validateUser()
     - Validates the user log-in attempt. (verify username and password)
 
-## POST FUNCTIONS:
+## Post Functions:
 * getPosts()
     - Returns the JSON of all posts in the database.
 * createPost()
@@ -27,8 +27,8 @@
 
 ---
 
-## Testing functions on CMD
-# USER FUNCTIONS:
+# Testing functions on CMD
+## User Functions:
 getUsers:
 
 newUser:
@@ -42,7 +42,7 @@ updateProfile:
 deleteUserByID:
 
 
-# POST FUNCTIONS:
+## Post Functions:
 - getPosts:
     `curl http://localhost:8080/posts`
 
