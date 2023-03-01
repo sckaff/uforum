@@ -43,36 +43,35 @@ deleteUserByID:
 
 
 # POST FUNCTIONS:
-getPosts:
-    $ curl http://localhost:8080/posts
+- getPosts:
+    `curl http://localhost:8080/posts`
 
-<br\>
-postNew:
-    $ curl http://localhost:8080/posts \
+- postNew:
+    ```
+    curl http://localhost:8080/posts \
     --include \
     --header "Content-Type: application/json" \
     --request "POST" \
     --data '{"id": "4", "user": "BeeBop57","title": "Why is Sckaff > Scaff?","body": "Excepteur sint occaecat cupidatat non proident."}'
+    ```
 
-<br\>
-getPostByID:
-    $ curl http://localhost:8080/posts/2
+- getPostByID:
+    `curl http://localhost:8080/posts/2`
 
-<br\>
-deletePostByID
-    $ curl -X DELETE http://localhost:8080/posts/2
+- deletePostByID
+    `curl -X DELETE http://localhost:8080/posts/2`
 
 ---
 
 # Initializing the server:
 ## First time:
 INITIALIZE ENVIRONMENT:
-    $ go mod init example/server-folder/
+    `go mod init example/server-folder/`
 
 AFTER IMPORTING PACKAGES:
-    $ go get .
+    `go get .`
 
 ## Recurrent:
 START SERVER:
-    $ go mod tidy (if needed)
-    $ go run main.go
+    `go mod tidy (if needed)`
+    `go run main.go`
