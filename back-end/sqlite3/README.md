@@ -1,5 +1,6 @@
 # For testing purposes:
 ## CREATE TABLES
+```
 CREATE TABLE USERS (
    uID INTEGER PRIMARY KEY AUTOINCREMENT,
    email TEXT NOT NULL UNIQUE,
@@ -8,28 +9,29 @@ CREATE TABLE USERS (
    firstName TEXT NOT NULL,
    lastName TEXT NOT NULL
 );
-
+```
+```
 CREATE TABLE POSTS(
    pID INTEGER PRIMARY KEY AUTOINCREMENT,
    userName TEXT NOT NULL,
    title TEXT NOT NULL,
    body TEXT NOT NULL
 );
-
+```
 
 ## INSERT VALUES
 || USERS ||
 
 
 || POSTS ||
-insert into posts values('1', 'Sckaff', 'The Sckaff Title', 'The Sckaff Body');
-insert into posts values('2', 'Scaff', 'The Scaff Title', 'The Scaff Body');
-insert into posts values('3', 'Nielsen', 'The Nielsen Title', 'The Nielsen Body');
-insert into posts values('4', 'Zhao', 'The Zhao Title', 'The Zhao Body');
+`insert into posts values('1', 'Sckaff', 'The Sckaff Title', 'The Sckaff Body');`
+`insert into posts values('2', 'Scaff', 'The Scaff Title', 'The Scaff Body');`
+`insert into posts values('3', 'Nielsen', 'The Nielsen Title', 'The Nielsen Body');`
+`insert into posts values('4', 'Zhao', 'The Zhao Title', 'The Zhao Body');`
 
 ## DROP TABLES
-DROP TABLE USERS;
-DROP TABLE POSTS;
+`DROP TABLE USERS;`
+`DROP TABLE POSTS;`
 
 # Debugging
 Go to site:
