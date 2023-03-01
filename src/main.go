@@ -1,127 +1,428 @@
 /*
-Initializing a server:
-	- INITIALIZE ENVIRONMENT:
-		$ go mod init example/server-folder/
-	- AFTER IMPORTING PACKAGES:
-		$ go get .
-	- START SERVER:
-		go run .
+Initializing the server:
+ First time:
+  - INITIALIZE ENVIRONMENT:
+    $ go mod init example/server-folder/
+
+  - AFTER IMPORTING PACKAGES:
+    $ go get .
+
+ Recurrent:
+  - START SERVER:
+    go mod tidy (if needed)
+    go run main.go
+
+Initialize database:
+  - Run the database:
+    $ sqlite3 ./uf_forum.db
 
 Functions:
-	- getPosts:
-		$ curl http://localhost:8080/posts
+USER FUNCTIONS:
+  	- getUsers:
+	- newUser:
+	- getUser:
+	- validateUser:
+	- updateProfile:
+	- deleteUserByID:
 
-	- postNew:
-		$ curl http://localhost:8080/posts \
-		  --include \
-		  --header "Content-Type: application/json" \
-		  --request "POST" \
-		  --data '{"id": "4", "user": "BeeBop57","title": "Why is Sckaff > Scaff?","body": "Excepteur sint occaecat cupidatat non proident."}'
+POST FUNCTIONS:
+  - getPosts:
+    $ curl http://localhost:8080/posts
 
-	- getPostByID:
-		$ curl http://localhost:8080/posts/2
+  - postNew:
+    $ curl http://localhost:8080/posts \
+    --include \
+    --header "Content-Type: application/json" \
+    --request "POST" \
+    --data '{"id": "4", "user": "BeeBop57","title": "Why is Sckaff > Scaff?","body": "Excepteur sint occaecat cupidatat non proident."}'
 
-	- deletePostByID
-		$ curl -X DELETE http://localhost:8080/posts/2
+  - getPostByID:
+    $ curl http://localhost:8080/posts/2
+
+  - deletePostByID
+    $ curl -X DELETE http://localhost:8080/posts/2
+
+Returns http code for failure or success, used to validate email and password match:
+http://localhost:8000/users/validate/{email}/{password}
 */
 
 package main
 
 import (
+	"database/sql"
+	"encoding/json"
 	"fmt"
+	"io"
+	"log"
 	"net/http"
 
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
+	_ "github.com/mattn/go-sqlite3"
 )
 
-// album represents data about a record album.
-type post struct {
-	ID    string `json:"id"`
-	User  string `json:"user"`
-	Title string `json:"title"`
-	Body  string `json:"body"`
+// User schema
+type User struct {
+	ID        string `json:"uID"`
+	Username  string `json:"username"`
+	Password  string `json:"password"`
+	Email     string `json:"email"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
 }
 
-type user struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+// Post schema
+type Post struct {
+	ID       string `json:"pID"`
+	UserName string `json:"userName"`
+	Title    string `json:"title"`
+	Body     string `json:"body"`
 }
 
-// albums slice to seed record album data.
-var posts = []post{
-	{ID: "1", User: "John33", Title: "RTS Bus Stop", Body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
-	{ID: "2", User: "Mary42", Title: "Drama on CDA3101", Body: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."},
-	{ID: "3", User: "John234", Title: "Sarah Vaughan and Clifford Brown", Body: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."},
+var db *sql.DB
+
+// ----------------------------- OPEN SERVER ----------------------------- //
+func openDB() *sql.DB {
+	db, err := sql.Open("sqlite3", "./sqlite3/uf_forum.db")
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	return db
+}
+
+// ----------------------------- USER FUNCTION CALLS ----------------------------- //
+// Returns the id and emails of all users
+func getUsers(w http.ResponseWriter, r *http.Request) {
+	db = openDB()
+	fmt.Println("getting first line at getUsers")
+	w.Header().Set("Content-Type", "application/json")
+	var users []User
+	result, err := db.Query("SELECT userid, uf_email, first_name, last_name from users")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer result.Close()
+
+	for result.Next() {
+		var user User
+		err := result.Scan(&user.ID, &user.Email, &user.FirstName, &user.LastName)
+		if err != nil {
+			panic(err.Error())
+		}
+		users = append(users, user)
+		fmt.Println(user.ID + " " + user.Email)
+	}
+
+	json.NewEncoder(w).Encode(users)
+}
+
+// Creates a new user. This function requires the inputted uf_email value to be unique
+func newUser(w http.ResponseWriter, r *http.Request) {
+	db = openDB()
+	w.Header().Set("Content-Type", "application/json")
+
+	stmt, err := db.Prepare("INSERT INTO users(uf_email,password,first_name,last_name) VALUES(?,?,?,?)")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	/*keyVal := make(map[string]string)
+	json.Unmarshal(body, &keyVal)
+	fmt.Println(keyVal)
+	email := keyVal["uf_email"]
+	password := keyVal["password"]
+	first_name := keyVal["first_name"]
+	last_name := keyVal["last_name"]
+
+	_, err = stmt.Exec(email, password, first_name, last_name)
+	if err != nil {
+		panic(err.Error())
+	}*/
+
+	var user User
+	err = json.Unmarshal(body, &user)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	_, err = stmt.Exec(user.Email, user.Password, user.FirstName, user.LastName)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	fmt.Fprintf(w, "New user was created")
+}
+
+// Returns a specific user based on inputted uID
+func getUser(w http.ResponseWriter, r *http.Request) {
+	db = openDB()
+
+	fmt.Println("user gotten")
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+
+	fmt.Println("Param Userid: " + params["userid"])
+
+	result, err := db.Query("SELECT userid, uf_email, first_name, last_name FROM users WHERE userid = ?", params["userid"])
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer result.Close()
+
+	var user User
+
+	for result.Next() {
+		err := result.Scan(&user.ID, &user.Email, &user.FirstName, &user.LastName)
+		fmt.Println(user)
+		if err != nil {
+			panic(err.Error())
+		}
+	}
+
+	json.NewEncoder(w).Encode(user)
+}
+
+// Used to validate email and password match
+func validateUser(w http.ResponseWriter, r *http.Request) {
+	db = openDB()
+
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+
+	fmt.Println("Param uf_email: " + params["uf_email"])
+	fmt.Println("Param password " + params["password"])
+
+	result, err := db.Query("SELECT password FROM users WHERE uf_email = ?", params["uf_email"])
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer result.Close()
+
+	var password string
+
+	for result.Next() {
+		err := result.Scan(&password)
+		fmt.Println(password)
+		if err != nil {
+			panic(err.Error())
+		}
+	}
+
+	if password == params["password"] {
+		w.WriteHeader(http.StatusOK) // Set HTTP status code to 200 (OK) when password matches
+		w.Write([]byte("Success"))
+	} else {
+		w.WriteHeader(http.StatusUnauthorized) // Set HTTP status code to 401 when password does not match
+		w.Write([]byte("Failure"))
+	}
+}
+
+// Updates the profile of a given user (work in progress)
+func updateProfile(w http.ResponseWriter, r *http.Request) {
+	db = openDB()
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+
+	stmt, err := db.Prepare("UPDATE users SET uf_email = ? WHERE userid = ?")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	keyVal := make(map[string]string)
+	json.Unmarshal(body, &keyVal)
+	newEmail := keyVal["uf_email"]
+
+	_, err = stmt.Exec(newEmail, params["userid"])
+	if err != nil {
+		panic(err.Error())
+	}
+
+	fmt.Fprintf(w, "User with ID = %s was updated", params["userid"])
+}
+
+// Deletes a specified user based on its userid
+func deleteUserByID(w http.ResponseWriter, r *http.Request) {
+	db = openDB()
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+
+	stmt, err := db.Prepare("DELETE FROM users WHERE userid = ?")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	_, err = stmt.Exec(params["userid"])
+	if err != nil {
+		panic(err.Error())
+	}
+
+	fmt.Fprintf(w, "User with ID = %s was deleted", params["userid"])
+}
+
+// ----------------------------- POST FUNCTION CALLS ----------------------------- //
+// Returns all the posts in the database by userid
+func getPosts(w http.ResponseWriter, r *http.Request) {
+	db = openDB()
+	fmt.Println("getting first line at getPosts")
+	w.Header().Set("Content-Type", "application/json")
+	var posts []Post
+	result, err := db.Query("SELECT pID, userName, title, body from posts")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer result.Close()
+
+	for result.Next() {
+		var post Post
+		err := result.Scan(&post.ID, &post.UserName, &post.Title, &post.Body)
+		if err != nil {
+			panic(err.Error())
+		}
+		posts = append(posts, post)
+	}
+
+	json.NewEncoder(w).Encode(posts)
+}
+
+// creates a new post
+func createPost(w http.ResponseWriter, r *http.Request) {
+	db = openDB()
+	w.Header().Set("Content-Type", "application/json")
+
+	stmt, err := db.Prepare("INSERT INTO posts(title) VALUES(?)")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	keyVal := make(map[string]string)
+	json.Unmarshal(body, &keyVal)
+	title := keyVal["title"]
+
+	_, err = stmt.Exec(title)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	fmt.Fprintf(w, "New post was created")
+}
+
+// Get a specific post
+func getPost(w http.ResponseWriter, r *http.Request) {
+	db = openDB()
+	fmt.Println("post gotten")
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+
+	fmt.Println("Param ID: " + params["id"])
+
+	result, err := db.Query("SELECT id, title FROM posts WHERE id = ?", params["id"])
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer result.Close()
+
+	var post Post
+
+	for result.Next() {
+		err := result.Scan(&post.ID, &post.Title)
+		if err != nil {
+			panic(err.Error())
+		}
+	}
+
+	json.NewEncoder(w).Encode(post)
+}
+
+// Updates the post's properties
+func updatePost(w http.ResponseWriter, r *http.Request) {
+	db = openDB()
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+
+	stmt, err := db.Prepare("UPDATE posts SET title = ? WHERE id = ?")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	keyVal := make(map[string]string)
+	json.Unmarshal(body, &keyVal)
+	newTitle := keyVal["title"]
+
+	_, err = stmt.Exec(newTitle, params["id"])
+	if err != nil {
+		panic(err.Error())
+	}
+
+	fmt.Fprintf(w, "Post with ID = %s was updated", params["id"])
+}
+
+// Deletes a post
+func deletePostByID(w http.ResponseWriter, r *http.Request) {
+	db = openDB()
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+
+	stmt, err := db.Prepare("DELETE FROM posts WHERE id = ?")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	_, err = stmt.Exec(params["id"])
+	if err != nil {
+		panic(err.Error())
+	}
+
+	fmt.Fprintf(w, "Post with ID = %s was deleted", params["id"])
 }
 
 func main() {
-	router := gin.Default()
-	router.Use(cors.Default())
-	router.GET("/posts", getPosts)
-	router.GET("/posts/:id", getPostByID)
-	router.DELETE("/posts/:id", deletePostByID)
-	router.POST("/posts", postNew)
+	router := mux.NewRouter()
 
-	router.Run("localhost:8080")
-}
+	// User
+	router.HandleFunc("/users", getUsers).Methods("GET")
+	router.HandleFunc("/users", newUser).Methods("POST")
+	router.HandleFunc("/users/validate/{uf_email}/{password}", validateUser).Methods("GET")
+	router.HandleFunc("/users/{userid}", getUser).Methods("GET")
+	router.HandleFunc("/users/{userid}", updateProfile).Methods("PUT")
+	router.HandleFunc("/users/{userid}", deleteUserByID).Methods("DELETE")
 
-// Helper function to remove element from array
-// Taken from https://stackoverflow.com/questions/37334119/how-to-delete-an-element-from-a-slice-in-golang
-func RemoveIndex(s []post, index int) []post {
-	return append(s[:index], s[index+1:]...)
-}
+	// Posts
+	router.HandleFunc("/posts", getPosts).Methods("GET")
+	router.HandleFunc("/posts", createPost).Methods("POST")
+	router.HandleFunc("/posts/{id}", getPost).Methods("GET")
+	router.HandleFunc("/posts/{id}", updatePost).Methods("PUT")
+	router.HandleFunc("/posts/{id}", deletePostByID).Methods("DELETE")
 
-// getPosts responds with the list of all posts as JSON.
-func getPosts(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, posts)
-}
+	fmt.Println("Server started!")
 
-// getPostByID locates the album whose ID value matches the id
-// parameter sent by the client, then returns that post as a response.
-func getPostByID(c *gin.Context) {
-	id := c.Param("id")
-
-	// Loop over the list of albums, looking for
-	// an album whose ID value matches the parameter.
-	for _, a := range posts {
-		if a.ID == id {
-			c.IndentedJSON(http.StatusOK, a)
-			return
-		}
-	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "post not found"})
-}
-
-// deletePostByID will remove the post based on the post's ID
-// anywhere on the database
-func deletePostByID(c *gin.Context) {
-	fmt.Println("ran delete function")
-	id := c.Param("id")
-
-	// Loop over the list of albums, looking for
-	// an album whose ID value matches the parameter.
-	for index, a := range posts {
-		if a.ID == id {
-			posts = RemoveIndex(posts, index)
-			c.IndentedJSON(http.StatusOK, gin.H{"success": "Post #" + id + " deleted"})
-			return
-		}
-	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "could not find post to delete"})
-}
-
-// postNew adds a post from JSON received in the request body.
-func postNew(c *gin.Context) {
-	var newPost post
-
-	// Call BindJSON to bind the received JSON to
-	// postNew.
-	if err := c.BindJSON(&newPost); err != nil {
-		return
-	}
-
-	// Add the new post to the slice.
-	posts = append(posts, newPost)
-	c.IndentedJSON(http.StatusCreated, newPost)
+	log.Fatal(http.ListenAndServe(":8080", handlers.CORS()(router)))
 }
