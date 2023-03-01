@@ -113,7 +113,7 @@ export default class Login extends Component<Props, State>{
                       value={this.state.password}
                     />
                   <br/><br/>
-                  <Button data-cy="login_button" variant="contained" type="submit">Log In</Button>
+                  <Button data-cy="login_comp_button" variant="contained" type="submit">Log In</Button>
                   </form>
               </div>
               <body>

@@ -12,7 +12,7 @@ describe('<Login />', () => {
         </BrowserRouter>
       </>
       )
-    cy.get('[data-cy=login_button]').click()
+    cy.get('[data-cy=login_comp_button]').click()
     cy.get('[data-cy=alert]').should('have.text', 'Username or Password was incorrect!')
   })
 })

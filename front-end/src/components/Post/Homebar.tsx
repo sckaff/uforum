@@ -22,10 +22,10 @@ export const Homebar = () => {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="fixed" >
                 <Toolbar>
-                    <Button color="inherit" startIcon={<HomeIcon />} href="http://localhost:3000/home">Home</Button>
-                    <Button color="inherit" startIcon={<SendIcon />} href="http://localhost:3000/">Create/View</Button>
+                    <Button data-cy="home_button" color="inherit" startIcon={<HomeIcon />} href="http://localhost:3000/home">Home</Button>
+                    <Button data-cy="view_button" color="inherit" startIcon={<SendIcon />} href="http://localhost:3000/">Create/View</Button>
                     <Box sx={{ flexGrow: 1 }}>
-                        <Button color="inherit" startIcon={<SendIcon />} href="http://localhost:3000/login">Log In</Button>
+                        <Button data-cy="login_button" color="inherit" startIcon={<SendIcon />} href="http://localhost:3000/login">Log In</Button>
                     </Box>
                     <IconButton href="http://localhost:3000/profile" sx={{ p: 0 }}>
                         <Avatar src="/broken-image.jpg" />
