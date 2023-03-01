@@ -1,51 +1,3 @@
-/*
-Initializing the server:
- First time:
-  - INITIALIZE ENVIRONMENT:
-    $ go mod init example/server-folder/
-
-  - AFTER IMPORTING PACKAGES:
-    $ go get .
-
- Recurrent:
-  - START SERVER:
-    go mod tidy (if needed)
-    go run main.go
-
-Initialize database:
-  - Run the database:
-    $ sqlite3 ./uf_forum.db
-
-Functions:
-USER FUNCTIONS:
-  	- getUsers:
-	- newUser:
-	- getUser:
-	- validateUser:
-	- updateProfile:
-	- deleteUserByID:
-
-POST FUNCTIONS:
-  - getPosts:
-    $ curl http://localhost:8080/posts
-
-  - postNew:
-    $ curl http://localhost:8080/posts \
-    --include \
-    --header "Content-Type: application/json" \
-    --request "POST" \
-    --data '{"id": "4", "user": "BeeBop57","title": "Why is Sckaff > Scaff?","body": "Excepteur sint occaecat cupidatat non proident."}'
-
-  - getPostByID:
-    $ curl http://localhost:8080/posts/2
-
-  - deletePostByID
-    $ curl -X DELETE http://localhost:8080/posts/2
-
-Returns http code for failure or success, used to validate email and password match:
-http://localhost:8000/users/validate/{email}/{password}
-*/
-
 package main
 
 import (
@@ -191,7 +143,8 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(user)
 }
 
-// Used to validate email and password match
+// Used to validate email and password match.
+// * Should return HTTP Success or Failure
 func validateUser(w http.ResponseWriter, r *http.Request) {
 	db = openDB()
 
@@ -408,12 +361,12 @@ func main() {
 	router := mux.NewRouter()
 
 	// User
-	router.HandleFunc("/users", getUsers).Methods("GET")
 	router.HandleFunc("/users", newUser).Methods("POST")
-	router.HandleFunc("/users/validate/{uf_email}/{password}", validateUser).Methods("GET")
+	router.HandleFunc("/users", getUsers).Methods("GET")
 	router.HandleFunc("/users/{userid}", getUser).Methods("GET")
 	router.HandleFunc("/users/{userid}", updateProfile).Methods("PUT")
 	router.HandleFunc("/users/{userid}", deleteUserByID).Methods("DELETE")
+	router.HandleFunc("/users/validate/{uf_email}/{password}", validateUser).Methods("GET")
 
 	// Posts
 	router.HandleFunc("/posts", getPosts).Methods("GET")

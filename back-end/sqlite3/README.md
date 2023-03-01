@@ -1,17 +1,5 @@
-||--------------- START ---------------||
-
-Go to site:
-- https://www.sqlite.org/
-
-Download precompiled binaries 64 bit and if uses windows download sqlite tools win32
-
-Run terminal:
-$ run sqlite3.exe 
-
-Go to /src folder and run:
-$ sqlite3 .\uf_forum.db
-
-||--------------- CREATE TABLES ---------------||
+# For testing purposes:
+## CREATE TABLES
 CREATE TABLE USERS (
    uID INTEGER PRIMARY KEY AUTOINCREMENT,
    email TEXT NOT NULL UNIQUE,
@@ -28,7 +16,8 @@ CREATE TABLE POSTS(
    body TEXT NOT NULL
 );
 
-||--------------- INSERT VALUES ---------------||
+
+## INSERT VALUES
 || USERS ||
 
 
@@ -38,6 +27,16 @@ insert into posts values('2', 'Scaff', 'The Scaff Title', 'The Scaff Body');
 insert into posts values('3', 'Nielsen', 'The Nielsen Title', 'The Nielsen Body');
 insert into posts values('4', 'Zhao', 'The Zhao Title', 'The Zhao Body');
 
-||--------------- DROP TABLES ---------------||
+## DROP TABLES
 DROP TABLE USERS;
 DROP TABLE POSTS;
+
+# Debugging
+Go to site:
+- https://www.sqlite.org/
+- Download precompiled binaries 64 bit and if uses windows download sqlite tools win32
+- Run terminal: 
+    $ run sqlite3.exe 
+- Check if it works - go to sqlite3 folder and run:
+    $ sqlite3 .\uf_forum.db (Mac)
+    $ .open .\uf_forum.db (Windows)
