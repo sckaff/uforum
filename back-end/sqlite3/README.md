@@ -24,10 +24,10 @@ CREATE TABLE POSTS(
 
 
 || POSTS ||
-`insert into posts values('1', 'Sckaff', 'The Sckaff Title', 'The Sckaff Body');`
-`insert into posts values('2', 'Scaff', 'The Scaff Title', 'The Scaff Body');`
-`insert into posts values('3', 'Nielsen', 'The Nielsen Title', 'The Nielsen Body');`
-`insert into posts values('4', 'Zhao', 'The Zhao Title', 'The Zhao Body');`
+`insert into posts values('1', 'Sckaff', 'The Sckaff Title', 'The Sckaff Body');` \
+`insert into posts values('2', 'Scaff', 'The Scaff Title', 'The Scaff Body');` \ 
+`insert into posts values('3', 'Nielsen', 'The Nielsen Title', 'The Nielsen Body');` \
+`insert into posts values('4', 'Zhao', 'The Zhao Title', 'The Zhao Body');` \
 
 ## DROP TABLES
 `DROP TABLE USERS;`
