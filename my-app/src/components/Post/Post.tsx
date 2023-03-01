@@ -1,7 +1,7 @@
 
 interface Post {
-    id: string;
-    user: string;
+    pID: string;
+    userName: string;
     title: string;
     body: string;
 }

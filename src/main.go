@@ -391,17 +391,17 @@ func deletePostByID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 
-	stmt, err := db.Prepare("DELETE FROM posts WHERE id = ?")
+	stmt, err := db.Prepare("DELETE FROM posts WHERE pID = ?")
 	if err != nil {
 		panic(err.Error())
 	}
 
-	_, err = stmt.Exec(params["id"])
+	_, err = stmt.Exec(params["pID"])
 	if err != nil {
 		panic(err.Error())
 	}
 
-	fmt.Fprintf(w, "Post with ID = %s was deleted", params["id"])
+	fmt.Fprintf(w, "Post with ID = %s was deleted", params["pID"])
 }
 
 func main() {
@@ -424,5 +424,7 @@ func main() {
 
 	fmt.Println("Server started!")
 
-	log.Fatal(http.ListenAndServe(":8080", handlers.CORS()(router)))
+	methods := []string{"GET", "POST", "PUT", "DELETE"}
+	headers := []string{"Content-Type"}
+	log.Fatal(http.ListenAndServe(":8080", handlers.CORS(handlers.AllowedMethods(methods), handlers.AllowedHeaders(headers))(router)))
 }

@@ -49,7 +49,7 @@ export const PostHome = () => {
     })
 
     const latest_posts = posts.map((post, index, row) => {
-        const post_url = '/post/' + post.id;
+        const post_url = '/post/' + post.pID;
         const single_post = 
             <ListItem alignItems='flex-start'>
                 <ListItemText
@@ -68,7 +68,7 @@ export const PostHome = () => {
                                 variant="body2"
                                 color="text.primary"
                             >
-                                {post.user}
+                                {post.userName}
                             </Typography>
                             {" — " + post.body.slice(0, 50) + "..."}
                         </React.Fragment>

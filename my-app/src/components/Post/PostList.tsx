@@ -88,8 +88,8 @@ export default class PostList extends Component<{}, myStates> {
             console.log(this.state.title);
             console.log(this.state.content);
             let new_post: Post = {
-                id: '4',
-                user: this.state.name,
+                pID: Math.floor(Math.random() * 5000).toString(),
+                userName: this.state.name,
                 title: this.state.title,
                 body: this.state.content
             }
@@ -123,14 +123,12 @@ export default class PostList extends Component<{}, myStates> {
         console.log("tried to delete post: " + post_id)
         let updated_posts: Post[] = this.state.current_posts;
         updated_posts.forEach((item, index) => {
-            if(item.id === post_id) this.state.current_posts.splice(index,1);
+            if(item.pID === post_id) this.state.current_posts.splice(index,1);
         })
         fetch('http://localhost:8080/posts/' + post_id, {
             method: "DELETE"})
-            .then((response) => response.json())
-            .then((json) => {
+            .then((response) => {
                 console.log('testy')
-                console.log(json)
                 this.setState({
                     noti_message: "Successfully deleted post!",
                     current_posts: updated_posts,
@@ -159,10 +157,10 @@ export default class PostList extends Component<{}, myStates> {
         }
 
         const htmlData = this.state.current_posts.map((post) => {
-            let accordion_id: string = post.user + '_accordion'
-            let delete_id: string = post.user + '_delete'
+            let accordion_id: string = post.userName + '_accordion'
+            let delete_id: string = post.userName + '_delete'
             return (
-                <Accordion key={post.id}>
+                <Accordion key={post.pID}>
                     <AccordionSummary
                     data-cy={accordion_id}
                     expandIcon={<ExpandMoreIcon />}
@@ -170,14 +168,14 @@ export default class PostList extends Component<{}, myStates> {
                     id="panel1a-header"
                     >
                     <Typography>
-                        [{post.id}] <b>{post.user}:</b> {post.title}
+                        [{post.pID}] <b>{post.userName}:</b> {post.title}
                         </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                         <Typography>
                             {post.body}
                             <br/>
-                            <IconButton data-cy={delete_id} aria-label="delete" onClick={() => this.handleDelete(post.id)}>
+                            <IconButton data-cy={delete_id} aria-label="delete" onClick={() => this.handleDelete(post.pID)}>
                                 <DeleteIcon/>
                             </IconButton>
                     </Typography>
