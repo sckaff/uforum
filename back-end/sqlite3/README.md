@@ -37,6 +37,6 @@ Go to site:
 - Download precompiled binaries 64 bit and if uses windows download sqlite tools win32
 - Run terminal: 
     `run sqlite3.exe`
-- Check if it works - go to sqlite3 folder and run:
+- Check if it works - go to sqlite3 folder and run: \
     `sqlite3 .\uf_forum.db` (Mac) \
     `.open .\uf_forum.db` (Windows)
