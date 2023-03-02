@@ -50,7 +50,7 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("getting first line at getUsers")
 	w.Header().Set("Content-Type", "application/json")
 	var users []User
-	result, err := db.Query("SELECT userid, uf_email, first_name, last_name from users")
+	result, err := db.Query("SELECT uID, username, password, email, first_name, last_name from users")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -59,7 +59,7 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 
 	for result.Next() {
 		var user User
-		err := result.Scan(&user.ID, &user.Email, &user.FirstName, &user.LastName)
+		err := result.Scan(&user.ID, &user.Username, &user.Email, &user.FirstName, &user.LastName)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -75,7 +75,7 @@ func newUser(w http.ResponseWriter, r *http.Request) {
 	db = openDB()
 	w.Header().Set("Content-Type", "application/json")
 
-	stmt, err := db.Prepare("INSERT INTO users(uf_email,password,first_name,last_name) VALUES(?,?,?,?)")
+	stmt, err := db.Prepare("INSERT INTO users(username,password,email,first_name,last_name) VALUES(?,?,?,?,?)")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -92,7 +92,6 @@ func newUser(w http.ResponseWriter, r *http.Request) {
 	password := keyVal["password"]
 	first_name := keyVal["first_name"]
 	last_name := keyVal["last_name"]
-
 	_, err = stmt.Exec(email, password, first_name, last_name)
 	if err != nil {
 		panic(err.Error())
@@ -104,7 +103,7 @@ func newUser(w http.ResponseWriter, r *http.Request) {
 		panic(err.Error())
 	}
 
-	_, err = stmt.Exec(user.Email, user.Password, user.FirstName, user.LastName)
+	_, err = stmt.Exec(user.Username, user.Password, user.Email, user.FirstName, user.LastName)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -120,9 +119,9 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 
-	fmt.Println("Param Userid: " + params["userid"])
+	fmt.Println("Param Userid: " + params["uID"])
 
-	result, err := db.Query("SELECT userid, uf_email, first_name, last_name FROM users WHERE userid = ?", params["userid"])
+	result, err := db.Query("SELECT uID, username, email, first_name, last_name FROM users WHERE userid = ?", params["uID"])
 
 	if err != nil {
 		panic(err.Error())
@@ -133,7 +132,7 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 	var user User
 
 	for result.Next() {
-		err := result.Scan(&user.ID, &user.Email, &user.FirstName, &user.LastName)
+		err := result.Scan(&user.ID, &user.Username, &user.Email, &user.FirstName, &user.LastName)
 		fmt.Println(user)
 		if err != nil {
 			panic(err.Error())
@@ -151,10 +150,10 @@ func validateUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 
-	fmt.Println("Param uf_email: " + params["uf_email"])
+	fmt.Println("Param uf_email: " + params["email"])
 	fmt.Println("Param password " + params["password"])
 
-	result, err := db.Query("SELECT password FROM users WHERE uf_email = ?", params["uf_email"])
+	result, err := db.Query("SELECT password FROM users WHERE email = ?", params["email"])
 
 	if err != nil {
 		panic(err.Error())
@@ -187,7 +186,7 @@ func updateProfile(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 
-	stmt, err := db.Prepare("UPDATE users SET uf_email = ? WHERE userid = ?")
+	stmt, err := db.Prepare("UPDATE users SET email = ? WHERE uID = ?")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -199,14 +198,14 @@ func updateProfile(w http.ResponseWriter, r *http.Request) {
 
 	keyVal := make(map[string]string)
 	json.Unmarshal(body, &keyVal)
-	newEmail := keyVal["uf_email"]
+	newEmail := keyVal["email"]
 
-	_, err = stmt.Exec(newEmail, params["userid"])
+	_, err = stmt.Exec(newEmail, params["uID"])
 	if err != nil {
 		panic(err.Error())
 	}
 
-	fmt.Fprintf(w, "User with ID = %s was updated", params["userid"])
+	fmt.Fprintf(w, "User with ID = %s was updated", params["uID"])
 }
 
 // Deletes a specified user based on its userid
@@ -215,17 +214,17 @@ func deleteUserByID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 
-	stmt, err := db.Prepare("DELETE FROM users WHERE userid = ?")
+	stmt, err := db.Prepare("DELETE FROM users WHERE uID = ?")
 	if err != nil {
 		panic(err.Error())
 	}
 
-	_, err = stmt.Exec(params["userid"])
+	_, err = stmt.Exec(params["uID"])
 	if err != nil {
 		panic(err.Error())
 	}
 
-	fmt.Fprintf(w, "User with ID = %s was deleted", params["userid"])
+	fmt.Fprintf(w, "User with ID = %s was deleted", params["uID"])
 }
 
 // ----------------------------- POST FUNCTION CALLS ----------------------------- //
@@ -259,7 +258,7 @@ func createPost(w http.ResponseWriter, r *http.Request) {
 	db = openDB()
 	w.Header().Set("Content-Type", "application/json")
 
-	stmt, err := db.Prepare("INSERT INTO posts(title) VALUES(?)")
+	stmt, err := db.Prepare("INSERT INTO posts(userName, title, body) VALUES(?,?,?)")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -269,11 +268,17 @@ func createPost(w http.ResponseWriter, r *http.Request) {
 		panic(err.Error())
 	}
 
-	keyVal := make(map[string]string)
+	/*keyVal := make(map[string]string)
 	json.Unmarshal(body, &keyVal)
-	title := keyVal["title"]
+	title := keyVal["title"]*/
 
-	_, err = stmt.Exec(title)
+	var post Post
+	err = json.Unmarshal(body, &post)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	_, err = stmt.Exec(post.UserName,post.Title,post.Body)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -288,9 +293,9 @@ func getPost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 
-	fmt.Println("Param ID: " + params["id"])
+	fmt.Println("Param ID: " + params["pID"])
 
-	result, err := db.Query("SELECT id, title FROM posts WHERE id = ?", params["id"])
+	result, err := db.Query("SELECT pID, userName, title, body FROM posts WHERE pID = ?", params["pID"])
 
 	if err != nil {
 		panic(err.Error())
@@ -301,7 +306,7 @@ func getPost(w http.ResponseWriter, r *http.Request) {
 	var post Post
 
 	for result.Next() {
-		err := result.Scan(&post.ID, &post.Title)
+		err := result.Scan(&post.ID, &post.UserName, &post.Title, &post.Body)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -316,7 +321,7 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 
-	stmt, err := db.Prepare("UPDATE posts SET title = ? WHERE id = ?")
+	stmt, err := db.Prepare("UPDATE posts SET body = ? WHERE pID = ?")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -328,14 +333,14 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 
 	keyVal := make(map[string]string)
 	json.Unmarshal(body, &keyVal)
-	newTitle := keyVal["title"]
+	newBody := keyVal["body"]
 
-	_, err = stmt.Exec(newTitle, params["id"])
+	_, err = stmt.Exec(newBody, params["pID"])
 	if err != nil {
 		panic(err.Error())
 	}
 
-	fmt.Fprintf(w, "Post with ID = %s was updated", params["id"])
+	fmt.Fprintf(w, "Post with ID = %s was updated", params["pID"])
 }
 
 // Deletes a post
@@ -371,9 +376,9 @@ func main() {
 	// Posts
 	router.HandleFunc("/posts", getPosts).Methods("GET")
 	router.HandleFunc("/posts", createPost).Methods("POST")
-	router.HandleFunc("/posts/{id}", getPost).Methods("GET")
-	router.HandleFunc("/posts/{id}", updatePost).Methods("PUT")
-	router.HandleFunc("/posts/{id}", deletePostByID).Methods("DELETE")
+	router.HandleFunc("/posts/{pID}", getPost).Methods("GET")
+	router.HandleFunc("/posts/{pID}", updatePost).Methods("PUT")
+	router.HandleFunc("/posts/{pID}", deletePostByID).Methods("DELETE")
 
 	fmt.Println("Server started!")
 
