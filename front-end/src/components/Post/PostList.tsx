@@ -98,18 +98,30 @@ export default class PostList extends Component<{}, myStates> {
                 method: "POST",
                 body: json_post,})
                 .then((response) => {
-                    if(response.status === 201)
+                    console.log('penis 1')
+                    if(response.status === 200)
                     {
+                        fetch('http://localhost:8080/posts')
+                        .then((response) => response.json())
+                        .then((json) => {
+                            let new_posts: Post[] = json;
+                            this.setState({
+                                current_posts: new_posts
+                            })
+                            console.log(new_posts);
+                        })
                         this.setState({
                             noti_message: "Successfully created post!",
-                            current_posts: [...this.state.current_posts, new_post],
                             dispNotification: true,
                             name: "",
                             title: "",
                             content: "",
                         })
                     }
-                }).catch((err) => {
+                    console.log(response)
+                    return response.json()
+                })
+                .catch((err) => {
                     console.log(err)
                     this.setState({
                         noti_message: "Error connecting to server!",
