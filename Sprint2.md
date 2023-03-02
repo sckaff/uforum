@@ -29,4 +29,4 @@
 
 ## Back End API Documentation
 
-- The Back End API documentation can be found in a README.md file in the back-end folder of the repo
+- The Back End API documentation can be found in a README.md file in the back-end folder of the repo.
