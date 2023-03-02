@@ -54,6 +54,7 @@ export default class PostList extends Component<{}, myStates> {
 
     handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        console.log('ran handle submit')
         this.setState({
             nameError: false,
             titleError: false,
@@ -101,27 +102,27 @@ export default class PostList extends Component<{}, myStates> {
                     console.log('penis 1')
                     if(response.status === 200)
                     {
+                        console.log('succcess')
                         fetch('http://localhost:8080/posts')
                         .then((response) => response.json())
                         .then((json) => {
                             let new_posts: Post[] = json;
                             this.setState({
-                                current_posts: new_posts
+                                current_posts: new_posts,
+                                noti_message: "Successfully created post!",
+                                dispNotification: true,
+                                name: "",
+                                title: "",
+                                content: "",
                             })
                             console.log(new_posts);
-                        })
-                        this.setState({
-                            noti_message: "Successfully created post!",
-                            dispNotification: true,
-                            name: "",
-                            title: "",
-                            content: "",
                         })
                     }
                     console.log(response)
                     return response.json()
                 })
                 .catch((err) => {
+                    console.log('eeee')
                     console.log(err)
                     this.setState({
                         noti_message: "Error connecting to server!",
