@@ -278,7 +278,7 @@ func createPost(w http.ResponseWriter, r *http.Request) {
 		panic(err.Error())
 	}
 
-	_, err = stmt.Exec(post.UserName,post.Title,post.Body)
+	_, err = stmt.Exec(post.UserName, post.Title, post.Body)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -385,4 +385,5 @@ func main() {
 	methods := []string{"GET", "POST", "PUT", "DELETE"}
 	headers := []string{"Content-Type"}
 	log.Fatal(http.ListenAndServe(":8080", handlers.CORS(handlers.AllowedMethods(methods), handlers.AllowedHeaders(headers))(router)))
+
 }
