@@ -25,7 +25,7 @@
 
 ## Back End Unit Tests
 
-- 
+- Created a unit test that checks if the data is successfully retrieved from the getPosts functions
 
 ## Back End API Documentation
 
