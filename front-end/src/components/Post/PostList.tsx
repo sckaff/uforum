@@ -197,7 +197,7 @@ export default class PostList extends Component<{}, myStates> {
             );
         })
         return(
-            <body className="pad">
+            <body>
                 <div>{htmlData}</div>
                 <div>
                     <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>

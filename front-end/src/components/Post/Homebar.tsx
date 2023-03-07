@@ -18,7 +18,7 @@ const HomeIcon = createSvgIcon(
 export const Homebar = () => {
     
     return (
-        <div className='header'>
+        <div className='header pb-16'>
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="fixed" >
                 <Toolbar>
