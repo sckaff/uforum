@@ -4,11 +4,6 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    fontFamily: {
-      google: [
-        'Nunito',
-      ]
-    },
     extend: {},
   },
   plugins: [],
