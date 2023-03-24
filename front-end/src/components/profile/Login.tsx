@@ -14,7 +14,8 @@ export default function Login(props: {loggedIn: boolean, setLoggedIn: Function})
     let navigate = useNavigate();
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [error, setError] = useState<boolean>(true);
+    const [visibility, setVisibility] = useState<string>("invisible");
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         console.log("submitting")
@@ -24,14 +25,13 @@ export default function Login(props: {loggedIn: boolean, setLoggedIn: Function})
             .then((res) => {
                 console.log(res);
                 if (res.token) {
-                    setError(false);
                     props.setLoggedIn(true);
                     navigate("/profile");
                 }
             })
             .catch((err) => {
                 console.log(err);
-                setError(true);
+                setVisibility("visible");
             });
     }
 
@@ -62,21 +62,21 @@ export default function Login(props: {loggedIn: boolean, setLoggedIn: Function})
                     </form>
                 </div>
                 <div>
-                <div role="alert" hidden={error}>
+                <div>
+                    <div className="footer">
+                        <Link to="/profile/register">
+                            Don't have an account? Register here!
+                        </Link>
+                    </div>
+                </div>
+                <div className={visibility}>
                     <div className="bg-red-500 text-white font-bold rounded-t px-4 py-2">
-                        Danger
+                        HEY!
                     </div>
                     <div className="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
                         <p>Failed to login</p>
                     </div>
                 </div>
-                </div>
-                <div>
-                    <div className="footer">
-                        <Link to="/Register">
-                            Don't have an account? Register here!
-                        </Link>
-                    </div>
                 </div>
             </div>
         );

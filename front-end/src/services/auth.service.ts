@@ -24,11 +24,12 @@ class AuthService {
   }
 
   register(username: string, email: string, password: string) {
-    return axios.post(API_URL + "/signup", {
-      username,
-      email,
-      password
-    });
+    return axios
+      .post(API_URL + "/register", {
+        username,
+        email,
+        password
+      });
   }
 
   getToken() {
