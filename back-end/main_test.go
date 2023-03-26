@@ -1,23 +1,31 @@
 package main
 
 import (
+	"cen/backend/controllers"
+	"cen/backend/models"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
-func Router() *mux.Router {
-	router := mux.NewRouter()
-	router.HandleFunc("/posts", getPosts).Methods("GET")
-	return router
-}
-
+// Test to check whether we can GET all posts
 func TestGetPosts(t *testing.T) {
-	request, _ := http.NewRequest("GET", "/posts", nil)
-	response := httptest.NewRecorder()
-	Router().ServeHTTP(response, request)
-	assert.Equal(t, 200, response.Code, "OK response is expected")
+
+	models.ConnectDatabase()
+
+	r := gin.Default()
+	r.Use(CORSMiddleware())
+	r.GET("/posts", controllers.GetPosts)
+
+	ts := httptest.NewServer(r)
+
+	res, err := http.Get(ts.URL + "/posts")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, http.StatusOK, res.StatusCode, "OK response is expected")
 }
