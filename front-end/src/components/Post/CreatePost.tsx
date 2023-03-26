@@ -29,6 +29,7 @@ export default function CreatePost(props: {loggedIn: boolean}) {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        console.log(category);
         const token = authService.getToken();
         if (token !== null) {
             const post: post_input = {
@@ -67,7 +68,8 @@ export default function CreatePost(props: {loggedIn: boolean}) {
             <form onSubmit={handleSubmit}>
                 <input id="title" value={title} type="text" placeholder="Title" onChange={(e) => setTitle(e.target.value)} required/><br/>
                 <textarea id="body" value={body} placeholder="Body" onChange={(e) => setBody(e.target.value)} required/><br/>
-                <select id="category" value={category} onChange={(e) => setCategory(e.target.value)} className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold w-36 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" required>
+                <select id="category" onChange={(e) => setCategory(e.target.value)} className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold w-36 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" required>
+                    <option value="null" disabled selected>Select Category</option>
                     {html_categories}
                 </select>
                 <br/>

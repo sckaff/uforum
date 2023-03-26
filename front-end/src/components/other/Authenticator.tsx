@@ -5,6 +5,7 @@ import CreatePost from '../Post/CreatePost';
 import PostView from '../Post/PostView';
 import Login from '../profile/Login';
 import Homebar from './Homebar';
+import Search from '../routes/Search';
 import authService from '../../services/auth.service';
 import ProfileView from '../profile/ProfileView';
 import Register from '../profile/Register';
@@ -31,6 +32,7 @@ export default function Authenticator() {
                     <Route path='/profile' element={<ProfileView loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>}/>
                     <Route path='/profile/login' element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>}/>
                     <Route path='/profile/register' element={<Register loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>}/>
+                    <Route path='/posts/search' element={<Search loggedIn={loggedIn}/>}/>
                 </Routes>
             </BrowserRouter>
         </>
