@@ -15,6 +15,7 @@ export default function Login(props: {loggedIn: boolean, setLoggedIn: Function})
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [visibility, setVisibility] = useState<string>("invisible");
+    const [error, setError] = useState<boolean>(true);
 
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -25,11 +26,13 @@ export default function Login(props: {loggedIn: boolean, setLoggedIn: Function})
             .then((res) => {
                 console.log(res);
                 if (res.token) {
+                    setError(false);
                     props.setLoggedIn(true);
                     navigate("/profile");
                 }
             })
             .catch((err) => {
+                setError(true);
                 console.log(err);
                 setVisibility("visible");
             });
