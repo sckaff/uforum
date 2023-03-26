@@ -41,3 +41,11 @@ AFTER IMPORTING PACKAGES:
 START SERVER: \
     `go mod tidy` \
     `go run main.go`
+
+---
+
+# Sqlite3 
+INSTALL:
+    `sudo port install sqlite3`
+OPEN:
+    `sqlite3 uforum.db`
