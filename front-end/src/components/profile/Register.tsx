@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useState } from "react";
 import AuthService from "../../services/auth.service";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { object, string } from 'yup';
-import 'flowbite';
 
 
 export default function Register(props: {loggedIn: boolean, setLoggedIn: Function}) {
