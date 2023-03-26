@@ -37,9 +37,6 @@ export default function Homebar(props: {loggedIn: boolean}) {
                 <Link to="/" className="block mt-4 lg:inline-block lg:mt-0 text-sky-200 hover:text-white mr-4">
                     Home
                 </Link>
-                <Link to="/categories" className="block mt-4 lg:inline-block lg:mt-0 text-sky-200 hover:text-white mr-4">
-                    Categories
-                </Link>
                 <Link to="/posts/search" className="block mt-4 lg:inline-block lg:mt-0 text-sky-200 hover:text-white mr-4">
                     Search
                 </Link>
