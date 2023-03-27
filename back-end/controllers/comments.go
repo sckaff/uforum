@@ -46,25 +46,45 @@ func CreateComment(c *gin.Context) {
 		return
 	}
 
-	var post models.Post
-	comment := models.Comment{Body: commentInput.Body, PostID: uint(commentInput.PostID), User: username, Post: post}
+	//var post models.Post
+	//comment := models.Comment{Body: commentInput.Body, PostID: uint(commentInput.PostID), User: username, Post: post}
 	/*if err := models.DB.Create(&comment).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create comment!"})
 		return
 	}*/
+	comment := models.Comment{Body: commentInput.Body, PostID: uint(commentInput.PostID), User: username}
 	models.DB.Create(&comment)
 
-	/*// Append the comment to the post's comments
-	post.Comment = append(post.Comment, comment)
+	/*
+		// Retrieve the post corresponding to the comment's post ID
+		if err := models.DB.Where("id = ?", commentInput.PostID).Preload("Comment").First(&post).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Post not found!"})
+			return
+		}
 
-	// Update the post with the new comment
-	if err := models.DB.Save(&post).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add comment to post!"})
-		return
-	}*/
+			// Append the comment to the post's comments
+			post.Comment = append(post.Comment, comment)
+
+			// Update the post with the new comment
+			if err := models.DB.Save(&post).Error; err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add comment to post!"})
+				return
+			}*/
 
 	// Return the created comment
 	c.JSON(http.StatusOK, gin.H{"data": comment})
+}
+
+func GetCommentsByPostID(c *gin.Context) {
+	postID := c.Param("postid")
+
+	var comments []models.Comment
+	if err := models.DB.Where("post_id = ?", postID).Find(&comments).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve comments"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": comments})
 }
 
 func EditComment(c *gin.Context) {
@@ -99,7 +119,7 @@ func EditComment(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "You are not authorized to edit this comment!"})
 	} else {
 		new_comment := models.Comment{Body: comment_input.Body, User: username}
-		models.DB.Model(&old_comment.User).Updates(new_comment)
+		models.DB.Model(&old_comment).Updates(new_comment)
 
 		c.JSON(http.StatusOK, gin.H{"data": new_comment})
 	}

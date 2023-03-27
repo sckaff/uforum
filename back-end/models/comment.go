@@ -6,5 +6,5 @@ type Comment struct {
 	Body   string `json:"body"`
 	User   string `json:"user"`
 	PostID uint   `json:"postid"`
-	Post   Post   `json:"post" gorm:"foreignkey:PostID;onUpdate:CASCADE;onDelete:CASCADE;"`
+	//Post   Post   `json:"post" gorm:"foreignkey:PostID;onUpdate:CASCADE;onDelete:CASCADE;"`
 }
