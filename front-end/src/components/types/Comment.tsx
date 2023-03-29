@@ -1,9 +1,9 @@
 
 interface Comment {
-    ID: number;
-	Body: string;
-	User: string;
-	PostID: number;
+	body: string
+	id: number
+	postid: number
+	user: string
 }
 
 export type { Comment }
