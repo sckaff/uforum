@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Post } from "../types/Post";
-import { Comment } from "../types/Comment";
 import { useParams } from "react-router-dom";
+import CommentSection from "./CommentSection";
 
 export default function PostView() {
 
@@ -18,14 +18,6 @@ export default function PostView() {
             });
     }, []);
 
-    const commentList = comments.map((Comment, i) => {
-        return (
-            <div className="max-w-sm rounded overflow-hidden shadow-lg border-2 p-2">
-            <h1 className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{Comment.user}</h1>
-            <p>{Comment.text}</p>
-        </div>
-        )
-    });
 
     if (post === undefined) {
         return (
@@ -46,7 +38,7 @@ export default function PostView() {
                 <div>
                     <p>Comments:</p>
                         <div>
-                          {commentList}  
+                          <CommentSection postID={post.id}/> 
                         </div>
 
                 </div>
