@@ -172,3 +172,16 @@ func DeletePost(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": true})
 	}
 }
+
+func GetPostsByCategory(c *gin.Context) {
+	categoryTitle := c.Param("category")
+
+	var posts []models.Post
+
+	if err := models.DB.Where("category = ?", categoryTitle).Find(&posts).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": posts})
+}

@@ -12,8 +12,6 @@
     - Registers a new user
 * Login()
     - Performs a sucessful login if credentials are right, outputs an error message otherwise
-* GetCommentsByPostID()
-    - Returns all comments to a post by its given post ID
 
 ## User Functions:
 * GetUserPosts()
@@ -24,12 +22,6 @@
     - Deletes a post made by the user. Only the post creator (or admin) can delete the post
 * PatchPost()
     - Updates the post. Only the post creator (or admin) can change the post
-* CreateComment()
-    - Creates a comment under a post.
-* EditComment()
-    - Edits the comment made by the user. Only the post creator can edit the comment
-* DeleteComment()
-    - Deletes a comment made by the user. Only the post creator (or admin) can delete the comment
 
 ## Admin Functions:
 * CreateCategory()
