@@ -12,6 +12,10 @@
     - Registers a new user
 * Login()
     - Performs a sucessful login if credentials are right, outputs an error message otherwise
+* GetPostsByCategory()
+    - Get all posts from a given category
+* GetCommentsByPostID
+    - Get all comments from a post by a given post id
 
 ## User Functions:
 * GetUserPosts()
@@ -22,10 +26,24 @@
     - Deletes a post made by the user. Only the post creator (or admin) can delete the post
 * PatchPost()
     - Updates the post. Only the post creator (or admin) can change the post
+* CreateComment()
+    - Creates a new comment and adds it to the database
+* EditComment()
+    - Edits a comment. Only the comment creator (or admin) can edi the comment
+* DeleteComment()
+    - Deletes a comment made by the user. Only the comment creator (or admin) can delete the comment
 
 ## Admin Functions:
 * CreateCategory()
-    - Updates the post. Only the post creator (or admin) can change the post.
+    - Creates a category. Only an admin can create a category.
+* EditCategory()
+    - Edits a category. Only an admin can create a category.
+* AdminDeletePost()
+    - Has the same functionality as DeletePost() but only the admin can access this function and can delete any post.
+* AdminDeleteComment()
+    - Has the same functionality as DeleteCommen() but only the admin can access this function and can delete any comment.
+* SetUserAsAdmin()
+    - Gives a user admin status. For now the method does not require admin access.
 
 ---
 
