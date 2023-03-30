@@ -36,7 +36,7 @@ export default function PostView() {
                     <p>{post.body}</p>
                 </div>
                 <div>
-                    <p>Comments:</p>
+                    <p data-cy="comment-title">Comments:</p>
                         <div>
                           <CommentSection postID={post.id}/> 
                         </div>

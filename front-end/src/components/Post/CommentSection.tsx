@@ -62,7 +62,7 @@ export default function CommentSectionNew(props: {postID: number}) {
         return (
             <div key={comment.id} className="max-w-sm rounded overflow-hidden shadow-lg border-2 p-2">
                 <div className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{comment.user}</div>
-                <div>{comment.body}</div>
+                <div data-cy={"comment-" + comment.body}>{comment.body}</div>
             </div>
         )
     });
@@ -71,8 +71,8 @@ export default function CommentSectionNew(props: {postID: number}) {
         <div>
             <div>
                 <form onSubmit={handleSubmit}>
-                    <input id="body" value={body} type="text" placeholder="Comment" onChange={(e) => setBody(e.target.value)} required/><br/>
-                    <button type="submit">Submit</button>
+                    <input data-cy="comment-input" id="body" value={body} type="text" placeholder="Comment" onChange={(e) => setBody(e.target.value)} required/><br/>
+                    <button data-cy="comment-submit" type="submit">Submit</button>
                 </form>
             </div>
             <div>

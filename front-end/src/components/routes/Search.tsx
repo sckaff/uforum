@@ -34,7 +34,7 @@ export default function Home(props: {loggedIn: boolean}) {
                 return search_posts.map((post, i) => {
                     return (
                         <div key={i} className="max-w-sm rounded overflow-hidden shadow-lg p-2">
-                            <div className="font-bold text-xl mb-2 bg-sky-200 rounded-lg">{post.title}</div>
+                            <div data-cy={"post-" + post.title} className="font-bold text-xl mb-2 bg-sky-200 rounded-lg">{post.title}</div>
                             <p>{post.body}</p>
                             <p>{post.category}</p>
                         </div>
@@ -70,8 +70,8 @@ export default function Home(props: {loggedIn: boolean}) {
             <h1>Home</h1>
             <p>Logged in: {props.loggedIn ? "Yes" : "No"}</p>
             <form>
-                <input type="text" placeholder="Search" onChange={(e) => setSearchText(e.target.value)} />
-                <select id="category" onChange={(e) => setCategory(e.target.value)} className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold w-36 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" required>
+                <input data-cy="search-box" type="text" placeholder="Search" onChange={(e) => setSearchText(e.target.value)} />
+                <select data-cy="category-selector" id="category" onChange={(e) => setCategory(e.target.value)} className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold w-36 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" required>
                     <option value="" disabled selected>Select Category</option>
                     {html_categories}
                 </select>

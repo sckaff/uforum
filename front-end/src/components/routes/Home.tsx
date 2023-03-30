@@ -83,7 +83,7 @@ export default function Home(props: {loggedIn: boolean}) {
         <div>
             <div className="max-w-7xl mx-auto grid grid-cols-12 gap-2 font-google">
                 <div className="col-span-4">
-                    <div className="text-center text-xl font-bold">
+                    <div data-cy="events-tab" className="text-center text-xl font-bold">
                         Events
                     </div>
                     <div className="grid gap-y-1">
@@ -91,7 +91,7 @@ export default function Home(props: {loggedIn: boolean}) {
                     </div>
                 </div>
                 <div className="col-span-4">
-                    <div className="text-center text-xl font-bold">
+                    <div data-cy="categories-tab" className="text-center text-xl font-bold">
                         Categories
                     </div>
                     <div className="grid gap-y-1">
@@ -99,7 +99,7 @@ export default function Home(props: {loggedIn: boolean}) {
                     </div>
                 </div>
                 <div className="col-span-4">
-                    <div className="text-center text-xl font-bold">
+                    <div data-cy="recents-tab" className="text-center text-xl font-bold">
                         Recents
                     </div>
                     <div className="grid gap-y-1">
