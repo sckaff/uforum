@@ -66,14 +66,14 @@ export default function CreatePost(props: {loggedIn: boolean}) {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <input id="title" value={title} type="text" placeholder="Title" onChange={(e) => setTitle(e.target.value)} required/><br/>
-                <textarea id="body" value={body} placeholder="Body" onChange={(e) => setBody(e.target.value)} required/><br/>
-                <select id="category" onChange={(e) => setCategory(e.target.value)} className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold w-36 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" required>
+                <input data-cy="post-title-input" id="title" value={title} type="text" placeholder="Title" onChange={(e) => setTitle(e.target.value)} required/><br/>
+                <textarea data-cy="post-body-input" id="body" value={body} placeholder="Body" onChange={(e) => setBody(e.target.value)} required/><br/>
+                <select data-cy="post-category-select" id="category" onChange={(e) => setCategory(e.target.value)} className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold w-36 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" required>
                     <option value="null" disabled selected>Select Category</option>
                     {html_categories}
                 </select>
                 <br/>
-                <button type="submit">Create</button>
+                <button data-cy="post-submit-button" type="submit">Create</button>
             </form>
         </div>
     );

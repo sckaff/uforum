@@ -14,7 +14,7 @@ export default function Homebar(props: {loggedIn: boolean}) {
         } else {
             console.log("token: " + localStorage.getItem("token"));
             return (
-                <Link to="/profile">
+                <Link data-cy="profile-button" to="/profile">
                     <div className="block mt-4 lg:inline-block lg:mt-0 text-sky-200 hover:text-white">Profile</div>
                 </Link>
             );

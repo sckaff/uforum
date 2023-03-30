@@ -64,7 +64,7 @@ export default function Home(props: {loggedIn: boolean}) {
         const post_url = '/posts/' + post.id;
 
         return (
-            <div key={post.id} className="bg-slate-100 rounded-lg border-2 border-slate-400">
+            <div data-cy={"post-" + post.title} key={post.id} className="bg-slate-100 rounded-lg border-2 border-slate-400">
                 <div className="text-lg font-semibold rounded bg-blue-400">                        
                     <React.Fragment>
                         <Link to={post_url}>
@@ -110,7 +110,7 @@ export default function Home(props: {loggedIn: boolean}) {
             <br/>
             { props.loggedIn ? 
                 <div>
-                    <button onClick={handleCreatePost} className="box-content border-2 rounded bg-slate-300 border-slate-500">Create Post!</button>
+                    <button data-cy="create-post-button" onClick={handleCreatePost} className="box-content border-2 rounded bg-slate-300 border-slate-500">Create Post!</button>
                 </div> 
                 : 
                 <div>Login to create a post!</div>

@@ -71,7 +71,7 @@ export default function ProfileView(props: {loggedIn: boolean, setLoggedIn: Func
                     <div>Title: {post.title}</div>
                     <div>Body: {post.body}</div>
                     <div>Category: {post.category}</div>
-                    <button onClick={() => handleDeletePost(post.id)} className="box-content border-2 rounded bg-slate-300 border-slate-500">Delete</button>
+                    <button data-cy={"post-delete-" + post.title} onClick={() => handleDeletePost(post.id)} className="box-content border-2 rounded bg-slate-300 border-slate-500">Delete</button>
                 </div>
             )});
 
