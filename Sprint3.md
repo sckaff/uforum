@@ -44,7 +44,8 @@
 - The Back End API documentation can be found in a README.md file in the back-end folder of the repo.
 
 ## Video Link
-(Insert Link Here)
+https://youtu.be/8Vg5FJ-UPFk
+
 ### A Note on Cypress Tests
 
 While Jest is a more general testing framework that can be used for testing various types of applications, Cypress component testing is tailored specifically for testing React components in a browser environment. Both tools serve the same purpose of ensuring that components are working as expected, but the approaches they take are different. Depending on the specific needs of a project, developers may choose to use one or both tools to test their React components. Even when comparing syntax between jest and cypress component testing the two look very similar because they preform the very same function.
