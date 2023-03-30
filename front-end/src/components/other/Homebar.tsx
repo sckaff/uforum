@@ -7,7 +7,7 @@ export default function Homebar(props: {loggedIn: boolean}) {
     const loginButton = () => {
         if (props.loggedIn === false) {
             return (
-                <Link data-cy="login-button" to="/profile/login">
+                <Link data-cy="login-button" to="/profile/login" data-testid="LogInBtn">
                     <div className="block mt-4 lg:inline-block lg:mt-0 text-sky-200 hover:text-white">Login</div>
                 </Link>
             );
@@ -34,10 +34,10 @@ export default function Homebar(props: {loggedIn: boolean}) {
             <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
                 <div className="text-sm lg:flex-grow">
                 <>
-                <Link data-cy="home-button" to="/" className="block mt-4 lg:inline-block lg:mt-0 text-sky-200 hover:text-white mr-4">
+                <Link data-cy="home-button" to="/" className="block mt-4 lg:inline-block lg:mt-0 text-sky-200 hover:text-white mr-4" data-testid="HomeBtn">
                     Home
                 </Link>
-                <Link data-cy="search_button" to="/posts/search" className="block mt-4 lg:inline-block lg:mt-0 text-sky-200 hover:text-white mr-4">
+                <Link data-cy="search_button" to="/posts/search" className="block mt-4 lg:inline-block lg:mt-0 text-sky-200 hover:text-white mr-4" data-testid="SearchBtn">
                     Search
                 </Link>
                 {loginButton()}
