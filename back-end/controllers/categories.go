@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"cen/backend/models"
+	"cen/backend/utils/token"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,6 +12,11 @@ import (
 type CreateCategoryInput struct {
 	Title       string `json:"title" binding:"required"`
 	Description string `json:"description" binding:"required"`
+}
+
+type EditCategoryInput struct {
+	Title       string `json:"title"`
+	Description string `json:"description"`
 }
 
 func GetCategories(c *gin.Context) {
@@ -21,20 +27,25 @@ func GetCategories(c *gin.Context) {
 }
 
 func CreateCategory(c *gin.Context) {
-	//try to figure out how to narrow down to only admin users
-	/*user_id, err := token.ExtractTokenID(c)
+	//finds username and checks if user is admin
+	userID, err := token.ExtractTokenID(c)
 
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
-	    u, err := models.GetUserByID(user_id)
+	user, err := models.GetUserByID(userID)
 
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}*/
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if !user.IsAdmin {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "You are not authorized to create categories!"})
+		return
+	}
 
 	var input CreateCategoryInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -45,17 +56,77 @@ func CreateCategory(c *gin.Context) {
 	category := models.Category{Title: input.Title, Description: input.Description}
 	models.DB.Create(&category)
 
-	//if user is admin else error.
 	c.JSON(http.StatusOK, gin.H{"data": category})
 }
 
-func GetPostsByCategory(c *gin.Context) {
-	var category models.Category
+func DeleteCategory(c *gin.Context) { //not tested yet
+	//finds username and checks if user is admin
+	userID, err := token.ExtractTokenID(c)
 
-	if err := models.DB.Where("title = ?", c.Param("title")).First(&category).Error; err != nil {
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	user, err := models.GetUserByID(userID)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if !user.IsAdmin {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "You are not authorized to create categories!"})
+		return
+	}
+
+	var category models.Category
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&category).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": category})
+	models.DB.Delete(&category)
+
+	//if user is admin else error(in progress).
+	c.JSON(http.StatusOK, gin.H{"data": true})
+}
+
+func EditCategory(c *gin.Context) {
+	//finds username and checks if user is admin
+	userID, err := token.ExtractTokenID(c)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	user, err := models.GetUserByID(userID)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if !user.IsAdmin {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "You are not authorized to create categories!"})
+		return
+	}
+
+	var old_category models.Category
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&old_category).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	var category_input EditCategoryInput
+	if err := c.ShouldBindJSON(&category_input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	new_category := models.Category{Title: category_input.Title, Description: category_input.Description}
+	models.DB.Model(&old_category).Updates(new_category)
+
+	c.JSON(http.StatusOK, gin.H{"data": new_category})
 }

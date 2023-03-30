@@ -44,6 +44,7 @@
     ]
   },
   "devDependencies": {
+    "cypress": "^12.9.0",
     "@babel/preset-typescript": "^7.21.0",
     "@types/jest": "^29.5.0",
     "jest": "^27.5.1",
