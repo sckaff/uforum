@@ -11,7 +11,10 @@ export default function Register(props: {loggedIn: boolean, setLoggedIn: Functio
     const [password, setPassword] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [errorMsg, setErrorMsg] = useState<string>("");
-    const [visibility, setVisibility] = useState<string>("invisible");
+    const [inputUsernameClassName, setInputUserNameClassName] = useState<string>("text-sm text-gray-base w-full mr-3 py-5 px-11 h-2 border border-gray-200 rounded mb-2 overflow-hidden shadow-lg");
+    const [inputEmailClassName, setInputEmailClassName] = useState<string>("text-sm text-gray-base w-full mr-3 py-5 px-11 h-2 border border-gray-200 rounded mb-2 overflow-hidden shadow-lg");
+    const [inputPassWordClassName, setInputPassWordClassName] = useState<string>("text-sm text-gray-base w-full mr-3 py-5 px-11 h-2 border border-gray-200 rounded mb-2 overflow-hidden shadow-lg");
+    const [errorMsgClassName, setErrorMsgClassName] = useState<string>("flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-10 invisible");
 
     let registerSchema = object({
         username: string().required('Please Fill Out All Fields'),
@@ -21,6 +24,9 @@ export default function Register(props: {loggedIn: boolean, setLoggedIn: Functio
       
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setInputUserNameClassName("text-sm text-gray-base w-full mr-3 py-5 px-11 h-2 border border-gray-200 rounded mb-2 overflow-hidden shadow-lg");
+        setInputEmailClassName("text-sm text-gray-base w-full mr-3 py-5 px-11 h-2 border border-gray-200 rounded mb-2 overflow-hidden shadow-lg");
+        setInputPassWordClassName("text-sm text-gray-base w-full mr-3 py-5 px-11 h-2 border border-gray-200 rounded mb-2 overflow-hidden shadow-lg");
         console.log("submitting: " + username + ", " + password + ", " + email)
 
         await registerSchema
@@ -43,19 +49,24 @@ export default function Register(props: {loggedIn: boolean, setLoggedIn: Functio
                     .catch((err) => {
                         console.log(err);
                         setErrorMsg(err);
-                        setVisibility("visible");
+                        setErrorMsgClassName("flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-10 visible");
                     });
                 } else {
                     console.log(email.substring(i, i + 8));
                     setErrorMsg("Not a UFL Email");
+                    setInputEmailClassName("text-sm text-gray-base w-full mr-3 py-5 px-11 h-2 border border-gray-200 rounded mb-2 overflow-hidden shadow-lg border-red-500");
+                    setErrorMsgClassName("flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-10 visible");
                 }
             })
             .catch((err) => {
                 setErrorMsg(err.errors);
-                setVisibility("visible");
-
+                setErrorMsgClassName("flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-10 visible");
                 console.log(err.name);
-                console.log(err.errors); 
+                console.log(err.errors);
+                console.log("submitting: " + username + ", " + password + ", " + email)
+                if (username === "") {setInputUserNameClassName("text-sm text-gray-base w-full mr-3 py-5 px-11 h-2 border border-gray-200 rounded mb-2 overflow-hidden shadow-lg border-red-500");}
+                if (password === "") {setInputPassWordClassName("text-sm text-gray-base w-full mr-3 py-5 px-11 h-2 border border-gray-200 rounded mb-2 overflow-hidden shadow-lg border-red-500");}
+                if (email === "" || err.length !== 0) {setInputEmailClassName("text-sm text-gray-base w-full mr-3 py-5 px-11 h-2 border border-gray-200 rounded mb-2 overflow-hidden shadow-lg border-red-500");}
             });
     }
 
@@ -69,28 +80,15 @@ export default function Register(props: {loggedIn: boolean, setLoggedIn: Functio
     }
     else {
         return (
-            <div>
-                <div className="card">
+                <div className="h-96 flex flex-col items-center justify-center">
                     <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-                        <input id="username" type="text" value={username} placeholder="Username" onChange={(e) => setUsername(e.target.value)} required/>
-                        <input id="email" type="email" value={email} placeholder="email" onChange={(e) => {setEmail(e.target.value)}} required/>
-                        <input id="password" type="password" value={password} placeholder="Password" onChange={(e) => {setPassword(e.target.value)}} required/>
-                        <button type="submit">Register</button>
+                        <input className={inputUsernameClassName} id="username" type="text" value={username} placeholder="Username" onChange={(e) => setUsername(e.target.value)} required/><br/>
+                        <input className={inputEmailClassName} id="email" type="email" value={email} placeholder="Email" onChange={(e) => {setEmail(e.target.value)}} required/><br/>
+                        <input className={inputPassWordClassName} id="password" type="password" value={password} placeholder="Password" onChange={(e) => {setPassword(e.target.value)}} required/><br/>
+                        <div className={errorMsgClassName}>{errorMsg}</div>
+                        <button className="bg-orange-400 w-full mt-4 rounded mb-2 overflow-hidden shadow-lg" type="submit">Register</button>
                     </form>
-                </div>
-                <div>
-                <div className={visibility}>
-                <div className="bg-red-500 text-white font-bold rounded-t px-4 py-2">
-                        HEY!
-                    </div>
-                    <div className="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
-                        <p>{errorMsg}</p>
-                    </div>                </div>
-                </div>
-                <div>
-                </div>
-            </div>
-            
+                </div>            
         );
     }
 }
