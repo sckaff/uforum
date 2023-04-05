@@ -8,13 +8,17 @@ type comment_input = {
     PostID: number,
 }
 
+const comment_class = "text-sm text-gray-base w-full border rounded";
+const comment_error_class = comment_class + " border-red-500";
+
 export default function CommentSectionNew(props: {postID: number}) {
 
     const [comments, setComments] = useState<Array<Comment>>([]);
     const [body, setBody] = useState<string>("");
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
-    const [commentInputBox, setCommentInputBox] = useState<string>("text-sm text-gray-base w-full mr-3 py-5 px-11 h-2 border rounded mb-2 overflow-hidden");
-    const [errorMsg, setErrorMsg] = useState<string>("flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-10 invisible");
+    const [commentInputBox, setCommentInputBox] = useState<string>(comment_class);
+    const [isError, setError] = useState<boolean>(false);
+
     useEffect(() => {
         fetch('http://localhost:8080/getcomments/' + props.postID)
         .then((res) => res.json())
@@ -29,8 +33,8 @@ export default function CommentSectionNew(props: {postID: number}) {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setCommentInputBox("text-sm text-gray-base w-full mr-3 py-5 px-11 h-2 border rounded mb-2 overflow-hidden");
-        setErrorMsg("flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-10 invisible");
+        setCommentInputBox(comment_class);
+        setError(false);
         if (loggedIn) {
             const token = authService.getToken();
             const comment: comment_input = {
@@ -57,8 +61,9 @@ export default function CommentSectionNew(props: {postID: number}) {
         }
         else {
             console.log("NOT LOGGED IN CANNOT CREATE POST")
-            setCommentInputBox("text-sm text-gray-base w-full mr-3 py-5 px-11 h-2 border rounded mb-2 overflow-hidden border-red-500");
-            setErrorMsg("flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-10 visible");
+            setCommentInputBox(comment_error_class);
+            console.log("error happened")
+            setError(true);
         }
     }
 
@@ -71,19 +76,34 @@ export default function CommentSectionNew(props: {postID: number}) {
         )
     });
 
+    const dispError = () => {
+        if (isError) {
+            return (
+                <div className={"flex items-center font-medium tracking-wide text-red-500 text-xs my-1 ml-10"}>You must be logged in to comment!</div>
+            )
+        }
+        else {
+            return (
+                <></>
+            )
+        }
+    }
+
     return (
         <div>
             <div>
+                <p data-cy="comment-title" className="text-lg font-sans font-bold">Create a comment:</p>
                 <form onSubmit={handleSubmit}>
-                    <br/>
-                    <input className={commentInputBox} data-cy="comment-input" id="body" value={body} type="text" placeholder="Comment" onChange={(e) => setBody(e.target.value)} required/><br/>
-                    <div className={errorMsg}>You must be logged in to comment!</div>
-                    <button className="bg-orange-400 w-full mt-4 rounded mb-2 overflow-hidden shadow-lg" data-cy="comment-submit" type="submit">Submit</button>
+                    {dispError()}
+                    <textarea className={commentInputBox} data-cy="comment-input" id="body" value={body} rows={4} placeholder="Comment" onChange={(e) => setBody(e.target.value)} required/><br/>
+                    <button className="bg-orange-400 w-full rounded mb-1 overflow-hidden shadow-lg" data-cy="comment-submit" type="submit">Submit</button>
                 </form>
             </div>
             <div>
+                <p data-cy="comment-title" className="text-lg font-sans font-bold">Comments:</p>
                 {commentList}
             </div>
+            <br/>
         </div>
     )
 }

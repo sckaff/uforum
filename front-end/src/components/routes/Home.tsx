@@ -81,7 +81,7 @@ export default function Home(props: {loggedIn: boolean}) {
 
     return (
         <div>
-            <div className="max-w-7xl mx-auto grid grid-cols-12 gap-2 font-google">
+            <div className="max-w-7xl mx-auto grid grid-cols-12 gap-2">
                 <div className="col-span-4">
                     <div data-cy="events-tab" className="text-center text-xl font-bold">
                         Events

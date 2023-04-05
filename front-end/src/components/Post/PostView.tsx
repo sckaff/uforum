@@ -28,9 +28,9 @@ export default function PostView() {
     }
     else {
         return (
-            <div className="h-screen flex flex-col items-center justify-center  ">
-                <div className=" min-w-96 w-1/2 rounded overflow-hidden shadow-lg border-gray-200 ">
-                    <div className="min-w-96 rounded overflow-hidden shadow-lg border-gray-200">
+            <div className="flex flex-col items-center justify-center mt-1 ">
+                <div className=" min-w-96 w-2/3 rounded overflow-hidden shadow-lg border-gray-200 ">
+                    <div className="min-w-96 border-2 rounded overflow-hidden shadow-lg mb-1 border-gray-200">
                         <div className="text-xl font-sans font-bold">
                             {post.title}
                         </div>
@@ -42,7 +42,6 @@ export default function PostView() {
                         </div>
                     </div>
                     <div className="min-w-96 rounded overflow-hidden shadow-lg border-gray-200">
-                    <p data-cy="comment-title" className="text-lg font-sans font-bold">Comments:</p>
                         <div>
                         <CommentSection postID={post.id}/> 
                         </div>
