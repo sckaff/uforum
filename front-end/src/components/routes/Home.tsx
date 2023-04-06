@@ -32,29 +32,56 @@ export default function Home(props: {loggedIn: boolean}) {
     // Currently uses the same html as the posts, but will be changed to display posts in the event category
     const html_events = posts.map((post, i) => {
         const post_url = '/posts/' + post.id;
+        let outline_color;
+        if (i % 2 === 0) {
+            outline_color = "border-sky-500";
+        } else {
+            outline_color = "border-orange-500";
+        }
 
         return (
-            <div key={post.id} className="bg-slate-100 rounded-lg border-2 border-slate-400">
-                <div className="text-lg font-semibold rounded bg-blue-400">                        
+            <div data-cy={"post-" + post.title} key={post.id} className={"rounded shadow-lg m-2 border-2 border-sky-500 " + outline_color}>
+            <div className='relative m-2'>
+                <div className="">                        
                     <React.Fragment>
                         <Link to={post_url}>
-                            <p className='url_styling'>{post.user}: {post.title}</p>
+                            <p className='url_styling text-lg font-semibold'>{post.title}</p>
                         </Link>
                     </React.Fragment>
                 </div>
-            <div>
+                <div>
                     <p className="font-light">{post.body.slice(0, 50) + "..."}</p>
                 </div>
+                <div className='absolute top-0 right-0'>
+                    +1
+                    <button>⬆</button>
+                    <button>⬇</button>
+                </div>
+                <div className='absolute bottom-0 right-0 font-thin italic'>
+                    {post.user} 
+                </div>
             </div>
+        </div>
         )
     })
 
     const html_categories = categories.map((category, i) => {
+        let outline_color;
+        if (i % 2 === 0) {
+            outline_color = "border-sky-500";
+        } else {
+            outline_color = "border-orange-500";
+        }
+
         return (
-            <div key={category.id} className="bg-slate-100 rounded-lg border-2 border-slate-400">
-                <p className="text-lg font-semibold rounded bg-blue-400">{category.title}</p>
-                <div>
-                    <p className="font-light">{category.description}</p>
+            <div data-cy={category.title} key={category.id} className={"rounded shadow-lg m-2 border-2 border-sky-500 " + outline_color}>
+                <div className='relative m-2'>
+                    <div className="">                        
+                        <p className='url_styling text-lg font-semibold'>{category.description}</p>
+                    </div>
+                    <div>
+                        <p className="font-light">{category.description}</p>
+                    </div>
                 </div>
             </div>
         )
@@ -62,18 +89,34 @@ export default function Home(props: {loggedIn: boolean}) {
 
     const html_recents = posts.map((post, i) => {
         const post_url = '/posts/' + post.id;
+        let outline_color;
+        if (i % 2 === 0) {
+            outline_color = "border-sky-500";
+        } else {
+            outline_color = "border-orange-500";
+        }
 
         return (
-            <div data-cy={"post-" + post.title} key={post.id} className="bg-slate-100 rounded-lg border-2 border-slate-400">
-                <div className="text-lg font-semibold rounded bg-blue-400">                        
-                    <React.Fragment>
-                        <Link to={post_url}>
-                            <p className='url_styling'>{post.user}: {post.title}</p>
-                        </Link>
-                    </React.Fragment>
-                </div>
-            <div>
-                    <p className="font-light">{post.body.slice(0, 50) + "..."}</p>
+            <div data-cy={"post-" + post.title} key={post.id} className={"rounded shadow-lg m-2 border-2 " + outline_color}>
+                <div className='relative m-2'>
+                    <div className="">                        
+                        <React.Fragment>
+                            <Link to={post_url}>
+                                <p className='url_styling text-lg font-semibold'>{post.title}</p>
+                            </Link>
+                        </React.Fragment>
+                    </div>
+                    <div>
+                        <p className="font-light">{post.body.slice(0, 50) + "..."}</p>
+                    </div>
+                    <div className='absolute top-0 right-0'>
+                        +1
+                        <button>⬆</button>
+                        <button>⬇</button>
+                    </div>
+                    <div className='absolute bottom-0 right-0 font-thin italic'>
+                        {post.user} 
+                    </div>
                 </div>
             </div>
         )
