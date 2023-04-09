@@ -28,8 +28,8 @@ export default function PostView() {
     }
     else {
         return (
-            <div className="flex flex-col items-center justify-center mt-1 ">
-                <div className=" min-w-96 w-2/3 rounded overflow-hidden shadow-lg border-gray-200 ">
+            <div className="flex flex-col items-center justify-center mt-1  ">
+                <div className=" min-w-96 w-2/3 rounded overflow-hidden shadow-lg border-2 border-sky-500">
                     <div className="min-w-96 border-2 rounded overflow-hidden shadow-lg mb-1 border-gray-200">
                         <div className="text-xl font-sans font-bold">
                             {post.title}
