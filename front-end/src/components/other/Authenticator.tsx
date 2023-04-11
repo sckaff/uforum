@@ -9,6 +9,7 @@ import Search from '../routes/Search';
 import authService from '../../services/auth.service';
 import ProfileView from '../profile/ProfileView';
 import Register from '../profile/Register';
+import CategoriesPage from '../routes/CategoriesPage';
 
 export default function Authenticator() {
 
@@ -33,6 +34,7 @@ export default function Authenticator() {
                     <Route path='/profile/login' element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>}/>
                     <Route path='/profile/register' element={<Register loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>}/>
                     <Route path='/posts/search' element={<Search loggedIn={loggedIn}/>}/>
+                    <Route path='/categories/:category' element={<CategoriesPage/>}/>
                 </Routes>
             </BrowserRouter>
         </>

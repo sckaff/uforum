@@ -4,6 +4,7 @@ import { Category } from '../types/Category';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
+
 export default function Home(props: {loggedIn: boolean}) {
 
     let navigate = useNavigate();
@@ -38,34 +39,36 @@ export default function Home(props: {loggedIn: boolean}) {
         } else {
             outline_color = "border-orange-500";
         }
-
-        return (
-            <div data-cy={"post-" + post.title} key={post.id} className={"rounded shadow-lg m-2 border-2 border-sky-500 " + outline_color}>
-            <div className='relative m-2'>
-                <div className="">                        
-                    <React.Fragment>
-                        <Link to={post_url}>
-                            <p className='url_styling text-lg font-semibold'>{post.title}</p>
-                        </Link>
-                    </React.Fragment>
-                </div>
-                <div>
-                    <p className="font-light">{post.body.slice(0, 50) + "..."}</p>
-                </div>
-                <div className='absolute top-0 right-0'>
-                    +1
-                    <button>⬆</button>
-                    <button>⬇</button>
-                </div>
-                <div className='absolute bottom-0 right-0 font-thin italic'>
-                    {post.user} 
+        if (post.category === "Events") {
+            return (
+                <div data-cy={"post-" + post.title} key={post.id} className={"rounded shadow-lg m-2 border-2 border-sky-500 " + outline_color}>
+                <div className='relative m-2'>
+                    <div className="">                        
+                        <React.Fragment>
+                            <Link to={post_url}>
+                                <p className='url_styling text-lg font-semibold'>{post.title}</p>
+                            </Link>
+                        </React.Fragment>
+                    </div>
+                    <div>
+                        <p className="font-light">{post.body.slice(0, 50) + "..."}</p>
+                    </div>
+                    <div className='absolute top-0 right-0'>
+                        +1
+                        <button>⬆</button>
+                        <button>⬇</button>
+                    </div>
+                    <div className='absolute bottom-0 right-0 font-thin italic'>
+                        {post.user} 
+                    </div>
                 </div>
             </div>
-        </div>
-        )
+            )
+        }
     })
 
     const html_categories = categories.map((category, i) => {
+        const categories_url = '/categories/' + category.title;
         let outline_color;
         if (i % 2 === 0) {
             outline_color = "border-sky-500";
@@ -76,8 +79,12 @@ export default function Home(props: {loggedIn: boolean}) {
         return (
             <div data-cy={category.title} key={category.id} className={"rounded shadow-lg m-2 border-2 border-sky-500 " + outline_color}>
                 <div className='relative m-2'>
-                    <div className="">                        
-                        <p className='url_styling text-lg font-semibold'>{category.description}</p>
+                    <div className="">  
+                        <React.Fragment>
+                            <Link to={categories_url}>                     
+                                <p className='url_styling text-lg font-semibold'>{category.description}</p>
+                            </Link> 
+                        </React.Fragment>
                     </div>
                     <div>
                         <p className="font-light">{category.description}</p>

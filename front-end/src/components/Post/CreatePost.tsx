@@ -57,6 +57,9 @@ export default function CreatePost(props: {loggedIn: boolean}) {
                 ).then((res) => {
                 console.log(res);
                 setPostAffirm(" font-medium tracking-wide text-green-500 text-xs mt-1 ml-2 visible");
+                setTitle("");
+                setBody("");
+                setCategory("");
             });
         } else {
             console.log('Not logged in');
