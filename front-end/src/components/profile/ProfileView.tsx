@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Post } from "../types/Post";
 import authService from "../../services/auth.service";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function ProfileView(props: {loggedIn: boolean, setLoggedIn: Function}) {
 
@@ -66,28 +66,56 @@ export default function ProfileView(props: {loggedIn: boolean, setLoggedIn: Func
     if(props.loggedIn) {
 
         const post_data = userPosts.map((post) => {
-            return (
-                <div key={post.id} className="box-content justify-self-center w-1/3 bg-slate-100 border-2 border-sky-300">
-                    <div>Title: {post.title}</div>
-                    <div>Body: {post.body}</div>
-                    <div>Category: {post.category}</div>
-                    <button data-cy={"post-delete-" + post.title} onClick={() => handleDeletePost(post.id)} className="box-content border-2 rounded bg-slate-300 border-slate-500">Delete</button>
-                </div>
-            )});
+            const post_url = '/posts/' + post.id;
+                    return (
+                        <div data-cy={"post-" + post.title} key={post.id} className={"rounded shadow-lg m-2 border-2 border-sky-500"}>
+                        <div className='relative m-2'>
+                            <div className="">                        
+                                <React.Fragment>
+                                    <Link to={post_url}>
+                                        <p className='url_styling text-lg font-semibold'>{post.title}</p>
+                                    </Link>
+                                </React.Fragment>
+                            </div>
+                            <div>
+                                <p className="font-light">{post.body.slice(0, 50) + "..."}</p>
+                            </div>
+                            <div className='absolute top-0 right-0'>
+                                +1
+                                <button>⬆</button>
+                                <button>⬇</button>
+                            </div>
+                            <div className='absolute bottom-0 right-0 font-thin italic'>
+                                <br/><button data-cy={"post-delete-" + post.title} onClick={() => handleDeletePost(post.id)} className="bg-orange-400 w-14 rounded overflow-hidden shadow-lg">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                    )});
 
         return (
-            <div className="grid grid-cols-2 text-center">
-                <div>
-                    Profile:
-                    <div>Username: {username}</div>
-                    <div>Email: {email}</div>
-                    <div>Creation Date: {creationDate}</div>
-                    <button onClick={handleLogoutButton} className="box-content border-2 rounded bg-slate-300 border-slate-500">Logout</button>
-                </div>
-                <div>
-                    Posts:
-                    <div className="grid grid-cols-1 gap-2 content-center">
-                        {post_data}
+            <div className="flex flex-col items-center justify-center">
+                <div className="grid grid-cols-3 gap-2 text-left w-2/3">
+                <div className="col-span-3 rounded overflow-hidden shadow-xl font-bold text-center text-3xl w-full h-14">{username}'s Profile Page</div>
+                    <div className="rounded overflow-hidden shadow-xl">
+                       <div className="text-center text-xl font-sans font-bold">Profile Info:</div>
+                            <div className="h-54 rounded shadow-lg m-2 border-2 border-sky-500">
+                                <div className="font-sans">Username: {username}</div><br/>
+                                <div className="font-sans">Email: {email}</div><br/>
+                                <div className="font-sans">Upvote Count: ??? </div><br/>
+                                <div className="font-sans">Member Since: {creationDate.slice(0, 10)} </div><br/>
+                                <button onClick={handleLogoutButton} className=" bottom-0 left-0 bg-orange-400 w-14 rounded overflow-hidden shadow-lg m-2">Logout</button>
+                            </div>
+                            <br/>
+                            <div className="text-center text-xl font-sans font-bold">Friends List:</div><br/>
+                            <div className=" rounded shadow-lg m-2 border-2 border-sky-500">
+                                <div className="font-sans">No friends yet!</div>
+                            </div>
+                        </div>
+                    <div className="col-span-2 rounded overflow-hidden shadow-xl">
+                         <div className="text-center text-xl font-sans font-bold">Posts:</div>
+                        <div className="grid grid-cols-1 gap-2 content-center">
+                            {post_data}
+                        </div>
                     </div>
                 </div>
             </div>
