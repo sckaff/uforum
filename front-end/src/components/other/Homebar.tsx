@@ -21,6 +21,18 @@ export default function Homebar(props: {loggedIn: boolean}) {
         }
     }
 
+    const createPostButton = () => {
+        if (props.loggedIn === true) {
+            return (
+                <Link data-cy="create-post-button" to="/posts/create">
+                    <div className="absolute right-0 mr-6 block lg:inline-block lg:mt-0 text-sky-200 hover:text-white">Create Post</div>
+                </Link>
+            );
+        } else {
+            return;
+        }
+    }
+
     return (
         <nav className="flex items-center justify-between flex-wrap bg-sky-500 p-6">
             <div className="flex items-center flex-shrink-0 text-white mr-6">
@@ -41,6 +53,7 @@ export default function Homebar(props: {loggedIn: boolean}) {
                     Search
                 </Link>
                 {loginButton()}
+                {createPostButton()}
                 </>
                 </div>
                 {/* <div>
