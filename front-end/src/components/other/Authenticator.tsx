@@ -23,7 +23,7 @@ export default function Authenticator() {
     }, []);
 
     return (
-        <>
+        <div className='min-h-screen flex flex-col h-screen'>
             <BrowserRouter>
             <Homebar loggedIn={loggedIn}/>
                 <Routes>
@@ -37,7 +37,7 @@ export default function Authenticator() {
                     <Route path='/categories/:category' element={<CategoriesPage/>}/>
                 </Routes>
             </BrowserRouter>
-        </>
+        </div>
         
     )
 }

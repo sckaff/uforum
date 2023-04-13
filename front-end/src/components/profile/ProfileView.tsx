@@ -20,7 +20,7 @@ export default function ProfileView(props: {loggedIn: boolean, setLoggedIn: Func
 
     const handleDeletePost = (postid: number) => {
         const token = authService.getToken();
-        if (props.loggedIn == false) {
+        if (props.loggedIn === false) {
             console.log("Error: not logged in")
         }
         else {
@@ -32,9 +32,9 @@ export default function ProfileView(props: {loggedIn: boolean, setLoggedIn: Func
             axios.delete("http://localhost:8080/user/deletepost/" + postid, headers)
                 .then((res) => {
                     console.log(res);
-                    if (res.status == 200) {
+                    if (res.status === 200) {
                         console.log("Post deleted");
-                        setUserPosts(userPosts.filter((post) => post.id != postid));
+                        setUserPosts(userPosts.filter((post) => post.id !== postid));
                     }
                 });
         }
@@ -98,7 +98,7 @@ export default function ProfileView(props: {loggedIn: boolean, setLoggedIn: Func
                 <div className="col-span-3 rounded overflow-hidden shadow-xl font-bold text-center text-3xl w-full h-14">{username}'s Profile Page</div>
                     <div className="rounded overflow-hidden shadow-xl">
                        <div className="text-center text-xl font-sans font-bold">Profile Info:</div>
-                            <div className="h-54 rounded shadow-lg m-2 border-2 border-sky-500">
+                            <div className="h-54 rounded shadow-lg m-2 border-2 p-2 border-sky-500">
                                 <div className="font-sans">Username: {username}</div><br/>
                                 <div className="font-sans">Email: {email}</div><br/>
                                 <div className="font-sans">Upvote Count: ??? </div><br/>
@@ -107,7 +107,7 @@ export default function ProfileView(props: {loggedIn: boolean, setLoggedIn: Func
                             </div>
                             <br/>
                             <div className="text-center text-xl font-sans font-bold">Friends List:</div><br/>
-                            <div className=" rounded shadow-lg m-2 border-2 border-sky-500">
+                            <div className="p-2 rounded shadow-lg m-2 border-2 border-sky-500">
                                 <div className="font-sans">No friends yet!</div>
                             </div>
                         </div>

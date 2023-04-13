@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Category } from "../types/Category";
-import { Post } from "../types/Post";
 import authService from "../../services/auth.service";
 
 type post_input = {
@@ -11,7 +10,7 @@ type post_input = {
 }
 
 const postBody_class = "text-sm text-gray-base w-96 border rounded m-2";
-const postBody_error_class = postBody_class + " border-red-500";
+const postTitleClassName = "text-sm text-gray-base w-96 mr-3 py-5 px-11 h-2 border border-gray-200 rounded mb-2 m-2"
 
 export default function CreatePost(props: {loggedIn: boolean}) {
 
@@ -19,7 +18,6 @@ export default function CreatePost(props: {loggedIn: boolean}) {
     const [body, setBody] = useState<string>("");
     const [category, setCategory] = useState<string>("");
     const [categories, setCategories] = useState<Array<Category>>([]);
-    const [postTitleClassName, setPostTitleClassName] = useState<string>("text-sm text-gray-base w-96 mr-3 py-5 px-11 h-2 border border-gray-200 rounded mb-2 m-2");
     const [postAffirm, setPostAffirm] = useState<string>("font-medium tracking-wide text-green-500 text-xs mt-1 ml-2 invisible");
 
 
