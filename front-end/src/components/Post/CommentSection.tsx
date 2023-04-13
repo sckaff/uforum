@@ -8,6 +8,7 @@ type comment_input = {
     PostID: number,
 }
 
+
 const comment_class = "text-sm text-gray-base w-full border rounded";
 const comment_error_class = comment_class + " border-red-500";
 
@@ -18,6 +19,7 @@ export default function CommentSectionNew(props: {postID: number}) {
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [commentInputBox, setCommentInputBox] = useState<string>(comment_class);
     const [isError, setError] = useState<boolean>(false);
+    const [userName, setUserName] = useState<string>("");
 
     useEffect(() => {
         fetch('http://localhost:8080/getcomments/' + props.postID)
@@ -25,9 +27,27 @@ export default function CommentSectionNew(props: {postID: number}) {
         .then((json) => {
             authService.isLoggedIn().then((isLogged) => {
                 setLoggedIn(isLogged);
+                const token = authService.getToken();
+                const headers = {
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                    }
+                }
+                axios.get("http://localhost:8080/user/", headers)
+                .then((res) => {
+                    let json = res.data.data
+                    setUserName(json.username);
+                    console.log("Active User: " + userName);
+                })
+                .catch((err) => {
+                    console.log("Error: " + err);
+                });
             })
             let comment_data: Comment[] = json.data;
             setComments(comment_data);
+        })
+        .catch((err) => {
+            console.log("Error: " + err);
         });
     }, []);
 
@@ -54,6 +74,7 @@ export default function CommentSectionNew(props: {postID: number}) {
             ).then((res) => {
                 let new_comment = res.data.data;
                 setComments([...comments, new_comment])
+                setBody("");
              }).catch((err) => {
                 console.log("Comment Failed!!" + err);
             });
@@ -66,12 +87,39 @@ export default function CommentSectionNew(props: {postID: number}) {
             setError(true);
         }
     }
-
+    const handleDelete = (id: number) => {
+        const token = authService.getToken();
+        const headers = {
+            headers: { 
+                'Authorization': `Bearer ${token}`,
+            }
+        }
+        axios.delete("http://localhost:8080/user/deletecomment/" + id, headers)
+        .then((res) => {
+            console.log(res);
+            if (res.status === 200) {
+                console.log("Post deleted");
+                setComments(comments.filter((comment) => comment.id !== id));
+            }
+        });
+    }
+    const deleteButton = (user: String, id: number) => {
+        if (user === userName) {
+            return (
+                <button className="absolute bottom-2 right-2" onClick={() => handleDelete(id)}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            )
+        }
+    }
     const commentList = comments.map((comment) => {
         return (
-            <div key={comment.id} className="min-w-96 rounded overflow-hidden shadow-lg border-2 p-2">
+            <div key={comment.id} className="relative min-w-96 rounded overflow-hidden border-2 p-3">
                 <div className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{comment.user}</div>
                 <div data-cy={"comment-" + comment.body}>{comment.body}</div>
+                {deleteButton(comment.user, comment.id)}
             </div>
         )
     });
@@ -92,7 +140,7 @@ export default function CommentSectionNew(props: {postID: number}) {
     return (
         <div>
             <div>
-                <p data-cy="comment-title" className="text-lg font-sans font-bold">Create a comment:</p>
+                <p data-cy="comment-title" className="text-lg font-sans font-bold ml-3 mt-1">Create a comment:</p>
                 <form onSubmit={handleSubmit}>
                     {dispError()}
                     <textarea className={commentInputBox} data-cy="comment-input" id="body" value={body} rows={4} placeholder="Comment" onChange={(e) => setBody(e.target.value)} required/><br/>
@@ -100,10 +148,9 @@ export default function CommentSectionNew(props: {postID: number}) {
                 </form>
             </div>
             <div>
-                <p data-cy="comment-title" className="text-lg font-sans font-bold">Comments:</p>
+                <p data-cy="comment-title" className="text-lg font-sans font-bold mx-3">Comments:</p>
                 {commentList}
             </div>
-            <br/>
         </div>
     )
 }

@@ -2,18 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Post } from '../types/Post';
 import { Category } from '../types/Category';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 
 
 export default function Home(props: {loggedIn: boolean}) {
 
-    let navigate = useNavigate();
     const [posts, setPosts] = useState<Post[]>([]);
     const [categories, setCategories] = useState<Array<Category>>([]);
 
-    const handleCreatePost = () => {
-        navigate('/posts/create')
-    }
 
     useEffect(() => {
         fetch('http://localhost:8080/posts')
@@ -21,7 +16,7 @@ export default function Home(props: {loggedIn: boolean}) {
             .then((json) => {
                 let post_data: Post[] = json.data;
                 setPosts(post_data);
-            });
+            })
             fetch('http://localhost:8080/categories')
                 .then((res) => res.json())
                 .then((json) => {
@@ -65,6 +60,9 @@ export default function Home(props: {loggedIn: boolean}) {
             </div>
             )
         }
+        else {
+            return null;
+        }
     })
 
     const html_categories = categories.map((category, i) => {
@@ -102,7 +100,6 @@ export default function Home(props: {loggedIn: boolean}) {
         } else {
             outline_color = "border-orange-500";
         }
-
         return (
             <div data-cy={"post-" + post.title} key={post.id} className={"rounded shadow-lg m-2 border-2 " + outline_color}>
                 <div className='relative m-2'>
