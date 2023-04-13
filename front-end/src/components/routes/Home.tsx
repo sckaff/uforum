@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Post } from '../types/Post';
 import { Category } from '../types/Category';
+import PostCard from '../Post/PostCard';
 import { Link } from 'react-router-dom';
 
 
@@ -27,7 +28,6 @@ export default function Home(props: {loggedIn: boolean}) {
 
     // Currently uses the same html as the posts, but will be changed to display posts in the event category
     const html_events = posts.map((post, i) => {
-        const post_url = '/posts/' + post.id;
         let outline_color;
         if (i % 2 === 0) {
             outline_color = "border-sky-500";
@@ -36,28 +36,7 @@ export default function Home(props: {loggedIn: boolean}) {
         }
         if (post.category === "Events") {
             return (
-                <div data-cy={"post-" + post.title} key={post.id} className={"rounded shadow-lg m-2 border-2 border-sky-500 " + outline_color}>
-                <div className='relative m-2'>
-                    <div className="">                        
-                        <React.Fragment>
-                            <Link to={post_url}>
-                                <p className='url_styling text-lg font-semibold'>{post.title}</p>
-                            </Link>
-                        </React.Fragment>
-                    </div>
-                    <div>
-                        <p className="font-light">{post.body.slice(0, 50) + "..."}</p>
-                    </div>
-                    <div className='absolute top-0 right-0'>
-                        +1
-                        <button>⬆</button>
-                        <button>⬇</button>
-                    </div>
-                    <div className='absolute bottom-0 right-0 font-thin italic'>
-                        {post.user} 
-                    </div>
-                </div>
-            </div>
+                <PostCard post={post} color={outline_color} />
             )
         }
         else {
@@ -93,7 +72,6 @@ export default function Home(props: {loggedIn: boolean}) {
     })
 
     const html_recents = posts.map((post, i) => {
-        const post_url = '/posts/' + post.id;
         let outline_color;
         if (i % 2 === 0) {
             outline_color = "border-sky-500";
@@ -101,28 +79,7 @@ export default function Home(props: {loggedIn: boolean}) {
             outline_color = "border-orange-500";
         }
         return (
-            <div data-cy={"post-" + post.title} key={post.id} className={"rounded shadow-lg m-2 border-2 " + outline_color}>
-                <div className='relative m-2'>
-                    <div className="">                        
-                        <React.Fragment>
-                            <Link to={post_url}>
-                                <p className='url_styling text-lg font-semibold'>{post.title}</p>
-                            </Link>
-                        </React.Fragment>
-                    </div>
-                    <div>
-                        <p className="font-light">{post.body.slice(0, 50) + "..."}</p>
-                    </div>
-                    <div className='absolute top-0 right-0'>
-                        +1
-                        <button>⬆</button>
-                        <button>⬇</button>
-                    </div>
-                    <div className='absolute bottom-0 right-0 font-thin italic'>
-                        {post.user} 
-                    </div>
-                </div>
-            </div>
+            <PostCard post={post} color={outline_color}/>
         )
     })
 
@@ -150,10 +107,7 @@ export default function Home(props: {loggedIn: boolean}) {
                         Recents
                     </div>
                     <div className="grid gap-y-1">
-                        <div className='flex flex-col'>
-                            {html_recents}
-                        </div>
-                        
+                        {html_recents}
                     </div>
                 </div>
             </div>
