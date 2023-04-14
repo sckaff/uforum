@@ -103,10 +103,10 @@ export default function CommentSectionNew(props: {postID: number}) {
             }
         });
     }
-    const deleteButton = (user: String, id: number) => {
+    const deleteButton = (user: String, id: number, body: String) => {
         if (user === userName) {
             return (
-                <button className="absolute bottom-2 right-2" onClick={() => handleDelete(id)}>
+                <button data-cy={`comment-delete-${body}`} className="absolute bottom-2 right-2" onClick={() => handleDelete(id)}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -119,7 +119,7 @@ export default function CommentSectionNew(props: {postID: number}) {
             <div key={comment.id} className="relative min-w-96 rounded overflow-hidden border-2 p-3">
                 <div className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{comment.user}</div>
                 <div data-cy={"comment-" + comment.body}>{comment.body}</div>
-                {deleteButton(comment.user, comment.id)}
+                {deleteButton(comment.user, comment.id, comment.body)}
             </div>
         )
     });

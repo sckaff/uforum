@@ -73,12 +73,12 @@ export default function ProfileView(props: {loggedIn: boolean, setLoggedIn: Func
                             <div className="">                        
                                 <React.Fragment>
                                     <Link to={post_url}>
-                                        <p className='url_styling text-lg font-semibold'>{post.title}</p>
+                                        <p className='url_styling text-lg font-semibold w-5/6'>{post.title}</p>
                                     </Link>
                                 </React.Fragment>
                             </div>
                             <div>
-                                <p className="font-light">{post.body.slice(0, 50) + "..."}</p>
+                                <p className="font-light w-5/6">{post.body.slice(0, 50) + "..."}</p>
                             </div>
                             <div className='absolute top-0 right-0'>
                                 +1

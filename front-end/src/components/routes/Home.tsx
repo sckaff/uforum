@@ -58,8 +58,8 @@ export default function Home(props: {loggedIn: boolean}) {
                 <div className='relative m-2'>
                     <div className="">  
                         <React.Fragment>
-                            <Link to={categories_url}>                     
-                                <p className='url_styling text-lg font-semibold'>{category.description}</p>
+                            <Link data-cy={`category-${category.title}`} to={categories_url}>                     
+                                <p className='url_styling text-lg font-semibold'>{category.title}</p>
                             </Link> 
                         </React.Fragment>
                     </div>

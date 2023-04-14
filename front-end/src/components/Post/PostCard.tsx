@@ -19,13 +19,13 @@ export default function PostCard(props: {post: Post, color: string}) {
             <div className='relative m-2'>
                 <div className="">                        
                     <React.Fragment>
-                        <Link to={post_url}>
-                            <p className='url_styling text-lg font-semibold'>{props.post.title}</p>
+                        <Link data-cy={`post-title-${props.post.title}`} to={post_url}>
+                            <p className='url_styling text-lg font-semibold w-5/6'>{props.post.title}</p>
                         </Link>
                     </React.Fragment>
                 </div>
                 <div>
-                    <p className="font-light">{props.post.body.slice(0, 50) + "..."}</p>
+                    <p className="font-light w-5/6">{props.post.body.slice(0, 50) + "..."}</p>
                 </div>
                 <div className='absolute top-0 right-0'>
                     +1

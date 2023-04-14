@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Post } from "../types/Post";
+import PostCard from "../Post/PostCard";
 
 export default function CategoriesPage() {
 
@@ -15,37 +16,14 @@ export default function CategoriesPage() {
                     }
             });
                 return search_posts.map((post, i) => {
-                    const post_url = '/posts/' + post.id;
                     let outline_color;
                     if (i % 2 === 0) {
                         outline_color = "border-sky-500";
                     } else {
                         outline_color = "border-orange-500";
                     }
-
                     return (
-                        <div data-cy={"post-" + post.title} key={post.id} className={"rounded shadow-lg m-2 border-2 border-sky-500 " + outline_color}>
-                        <div className='relative m-2'>
-                            <div className="">                        
-                                <React.Fragment>
-                                    <Link to={post_url}>
-                                        <p className='url_styling text-lg font-semibold'>{post.title}</p>
-                                    </Link>
-                                </React.Fragment>
-                            </div>
-                            <div>
-                                <p className="font-light">{post.body.slice(0, 50) + "..."}</p>
-                            </div>
-                            <div className='absolute top-0 right-0'>
-                                +1
-                                <button>⬆</button>
-                                <button>⬇</button>
-                            </div>
-                            <div className='absolute bottom-0 right-0 font-thin italic'>
-                                {post.user} 
-                            </div>
-                        </div>
-                    </div>
+                        <PostCard post={post} color={outline_color} />
                     )
                 });
     
