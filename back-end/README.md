@@ -32,6 +32,12 @@
     - Edits a comment. Only the comment creator (or admin) can edi the comment
 * DeleteComment()
     - Deletes a comment made by the user. Only the comment creator (or admin) can delete the comment
+* LikePost()
+    - Likes a post. The user is recorded as a username in the post's like list
+* DislikePost()
+    - Dislikes a post. The user is recorded as a username in the post's dislike list
+* ClearPostLikes()
+    - Clears any rating a user has made on a post.
 
 ## Admin Functions:
 * CreateCategory()

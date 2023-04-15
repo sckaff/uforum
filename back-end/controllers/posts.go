@@ -6,6 +6,8 @@ import (
 	"cen/backend/models"
 	"cen/backend/utils/token"
 
+	"strings"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -78,7 +80,7 @@ func CreatePost(c *gin.Context) {
 		return
 	}
 
-	post := models.Post{Title: post_input.Title, Body: post_input.Body, Category: post_input.Category, User: username}
+	post := models.Post{Title: post_input.Title, Body: post_input.Body, Category: post_input.Category, User: username, Likes: "", Dislikes: ""}
 	models.DB.Create(&post)
 
 	c.JSON(http.StatusOK, gin.H{"data": post})
@@ -132,7 +134,7 @@ func PatchPost(c *gin.Context) {
 	if old_post.User != username {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "You are not authorized to edit this post!"})
 	} else {
-		new_post := models.Post{Title: post_input.Title, Body: post_input.Body, Category: post_input.Category, User: username}
+		new_post := models.Post{Title: post_input.Title, Body: post_input.Body, Category: post_input.Category, User: username, Likes: "", Dislikes: ""}
 		models.DB.Model(&old_post).Updates(new_post)
 
 		c.JSON(http.StatusOK, gin.H{"data": new_post})
@@ -184,4 +186,150 @@ func GetPostsByCategory(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": posts})
+}
+
+// REQUIRES LOGIN
+func LikePost(c *gin.Context) {
+	userID, err := token.ExtractTokenID(c)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	user, err := models.GetUserByID(userID)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	username := user.Username
+
+	var post models.Post
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&post).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Post not found!"})
+		return
+	}
+
+	// checks if the user has liked the post
+	if strings.Contains(post.Likes, username) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "You have already liked this post!"})
+		return
+	}
+
+	// checks if the user has disliked the post
+	if strings.Contains(post.Dislikes, username) {
+		// removes user from dislikes string
+		post.Dislikes = strings.ReplaceAll(post.Dislikes, username+",", "")
+		post.Likes += username + ","
+		post.NetRating += 2
+	} else {
+		// otherwise user has not rated the post yet
+		post.Likes += username + ","
+		post.NetRating += 1
+	}
+
+	if err := models.DB.Save(&post).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update like array!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": post})
+}
+
+// REQUIRES LOGIN
+func DislikePost(c *gin.Context) {
+	userID, err := token.ExtractTokenID(c)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	user, err := models.GetUserByID(userID)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	username := user.Username
+
+	var post models.Post
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&post).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Post not found!"})
+		return
+	}
+
+	// checks if the user has disliked the post
+	if strings.Contains(post.Dislikes, username) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "You have already disliked this post!"})
+		return
+	}
+
+	// checks if the user has liked the post
+	if strings.Contains(post.Likes, username) {
+		// removes user from dislikes string
+		post.Likes = strings.ReplaceAll(post.Likes, username+",", "")
+		post.Dislikes += username + ","
+		post.NetRating -= 2
+	} else {
+		// otherwise user has not rated the post yet
+		post.Dislikes += username + ","
+		post.NetRating -= 1
+	}
+
+	if err := models.DB.Save(&post).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update like array!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": post})
+}
+
+// REQUIRES LOGIN
+func ClearPostLikes(c *gin.Context) {
+	userID, err := token.ExtractTokenID(c)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	user, err := models.GetUserByID(userID)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	username := user.Username
+
+	var post models.Post
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&post).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Post not found!"})
+		return
+	}
+
+	// checks if the user has liked the post
+	if strings.Contains(post.Likes, username) {
+		// removes user from likes string
+		post.Likes = strings.ReplaceAll(post.Likes, username+",", "")
+		post.NetRating -= 1
+	} else if strings.Contains(post.Dislikes, username) { // checks if the user has disliked the post
+		// removes user from dislikes string
+		post.Dislikes = strings.ReplaceAll(post.Dislikes, username+",", "")
+		post.NetRating += 1
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "You have not rated this post!"})
+		return
+	}
+
+	if err := models.DB.Save(&post).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update like/dislike array!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": post})
 }
