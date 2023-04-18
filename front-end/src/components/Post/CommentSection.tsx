@@ -119,7 +119,7 @@ export default function CommentSectionNew(props: {postID: number}) {
             </div>
             <div>
                 <p data-cy="comment-title" className="text-lg font-sans font-bold mx-3">Comments:</p>
-                {commentList}
+                {updateCommentList()}
             </div>
         </div>
     )

@@ -71,6 +71,8 @@ export default function Home(props: {loggedIn: boolean}) {
         )
     })
 
+    let j = 0;
+
     const html_recents = posts.map((post, i) => {
         let outline_color;
         if (i % 2 === 0) {
@@ -78,14 +80,25 @@ export default function Home(props: {loggedIn: boolean}) {
         } else {
             outline_color = "border-orange-500";
         }
-        return (
-            <PostCard post={post} color={outline_color}/>
-        )
+        if (i >= posts.length - 5){
+            j++;
+            return (
+                <PostCard post={posts[posts.length - j]} color={outline_color}/>
+            )
+        }
     })
 
     return (
         <div className='flex flex-col overflow-hidden h-full p-2'>
             <div className="max-w-7xl mx-auto grid grid-cols-12 gap-2 h-full overflow-hidden">
+            <div className="col-span-4 h-full overflow-y-auto">
+                    <div data-cy="recents-tab" className="text-center text-xl font-bold">
+                        Recents
+                    </div>
+                    <div className="grid gap-y-1">
+                        {html_recents}
+                    </div>
+                </div>
                 <div className="col-span-4 h-full overflow-y-auto">
                     <div data-cy="events-tab" className="text-center text-xl font-bold">
                         Events
@@ -100,14 +113,6 @@ export default function Home(props: {loggedIn: boolean}) {
                     </div>
                     <div className="grid gap-y-1">
                         {html_categories}
-                    </div>
-                </div>
-                <div className="col-span-4 h-full overflow-y-auto">
-                    <div data-cy="recents-tab" className="text-center text-xl font-bold">
-                        Recents
-                    </div>
-                    <div className="grid gap-y-1">
-                        {html_recents}
                     </div>
                 </div>
             </div>

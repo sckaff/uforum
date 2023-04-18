@@ -11,7 +11,8 @@ type post_input = {
 
 const postBody_class = "text-sm text-gray-base w-96 border rounded m-2";
 const postTitleClassName = "text-sm text-gray-base w-96 mr-3 py-5 px-11 h-2 border border-gray-200 rounded mb-2 m-2"
-
+const selectionClassName = "inline-flex w-2/3 m-2 justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold w-36 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+const postRespo = "Post Submitted!";
 export default function CreatePost(props: {loggedIn: boolean}) {
 
     const [title, setTitle] = useState<string>("");
@@ -19,8 +20,7 @@ export default function CreatePost(props: {loggedIn: boolean}) {
     const [category, setCategory] = useState<string>("");
     const [categories, setCategories] = useState<Array<Category>>([]);
     const [postAffirm, setPostAffirm] = useState<string>("font-medium tracking-wide text-green-500 text-xs mt-1 ml-2 invisible");
-
-
+    const [postResponse, setPostResponse] = useState<string>(postRespo);
     useEffect(() => {
         fetch('http://localhost:8080/categories')
         .then((res) => res.json())
@@ -34,7 +34,13 @@ export default function CreatePost(props: {loggedIn: boolean}) {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(category);
+        setPostResponse(postRespo);
+        setPostAffirm("font-medium tracking-wide text-green-500 text-xs mt-1 ml-2 invisible");
         const token = authService.getToken();
+        if (category === "") {
+            setPostResponse("Please select a category");
+            setPostAffirm(" font-medium tracking-wide text-red-500 text-xs mt-1 ml-2 visible");
+        }
         if (token !== null) {
             const post: post_input = {
                 title: title,
@@ -78,12 +84,12 @@ export default function CreatePost(props: {loggedIn: boolean}) {
             <form onSubmit={handleSubmit}>
                 <input className={postTitleClassName} data-cy="post-title-input" id="title" value={title} type="text" placeholder="Title" onChange={(e) => setTitle(e.target.value)} required/><br/>
                 <textarea className={postBody_class} data-cy="post-body-input" id="body" value={body} placeholder="Body" onChange={(e) => setBody(e.target.value)} required/><br/>
-                <select data-cy="post-category-select" id="category" onChange={(e) => setCategory(e.target.value)} className="inline-flex w-2/3 m-2 justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold w-36 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" required>
+                <select data-cy="post-category-select" id="category" onChange={(e) => setCategory(e.target.value)} className={selectionClassName} required>
                     <option value="null" disabled selected>Select Category</option>
                     {html_categories}
                 </select>
                 <button className="bg-orange-400 w-full rounded mb-1 overflow-hidden shadow-lg m-2" data-cy="post-submit-button" type="submit">Create</button>
-                <div className={postAffirm}>Post Submitted!</div>
+                <div className={postAffirm}>{postResponse}</div>
             </form>
             </div>
         </div>

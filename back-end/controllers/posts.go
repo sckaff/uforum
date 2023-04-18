@@ -80,7 +80,7 @@ func CreatePost(c *gin.Context) {
 		return
 	}
 
-	post := models.Post{Title: post_input.Title, Body: post_input.Body, Category: post_input.Category, User: username, Likes: "", Dislikes: ""}
+	post := models.Post{Title: post_input.Title, Body: post_input.Body, Category: post_input.Category, User: username, Likes: "", Dislikes: "", NetRating: 0}
 	models.DB.Create(&post)
 
 	c.JSON(http.StatusOK, gin.H{"data": post})
@@ -212,6 +212,9 @@ func LikePost(c *gin.Context) {
 		return
 	}
 
+	var originalposter models.User
+	models.DB.Where("username = ?", post.User).First(&originalposter)
+
 	// checks if the user has liked the post
 	if strings.Contains(post.Likes, username) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "You have already liked this post!"})
@@ -224,10 +227,18 @@ func LikePost(c *gin.Context) {
 		post.Dislikes = strings.ReplaceAll(post.Dislikes, username+",", "")
 		post.Likes += username + ","
 		post.NetRating += 2
+		originalposter.UpvoteCount += 2
+		//post.User.UpvoteCount += 2
 	} else {
 		// otherwise user has not rated the post yet
 		post.Likes += username + ","
 		post.NetRating += 1
+		originalposter.UpvoteCount += 1
+	}
+
+	if err := models.DB.Save(&originalposter).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update upvote count of orginal poster!"})
+		return
 	}
 
 	if err := models.DB.Save(&post).Error; err != nil {
@@ -262,6 +273,9 @@ func DislikePost(c *gin.Context) {
 		return
 	}
 
+	var originalposter models.User
+	models.DB.Where("username = ?", post.User).First(&originalposter)
+
 	// checks if the user has disliked the post
 	if strings.Contains(post.Dislikes, username) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "You have already disliked this post!"})
@@ -274,10 +288,17 @@ func DislikePost(c *gin.Context) {
 		post.Likes = strings.ReplaceAll(post.Likes, username+",", "")
 		post.Dislikes += username + ","
 		post.NetRating -= 2
+		originalposter.UpvoteCount -= 2
 	} else {
 		// otherwise user has not rated the post yet
 		post.Dislikes += username + ","
 		post.NetRating -= 1
+		originalposter.UpvoteCount -= 1
+	}
+
+	if err := models.DB.Save(&originalposter).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update upvote count of orginal poster!"})
+		return
 	}
 
 	if err := models.DB.Save(&post).Error; err != nil {
@@ -312,17 +333,27 @@ func ClearPostLikes(c *gin.Context) {
 		return
 	}
 
+	var originalposter models.User
+	models.DB.Where("username = ?", post.User).First(&originalposter)
+
 	// checks if the user has liked the post
 	if strings.Contains(post.Likes, username) {
 		// removes user from likes string
 		post.Likes = strings.ReplaceAll(post.Likes, username+",", "")
 		post.NetRating -= 1
+		originalposter.UpvoteCount -= 1
 	} else if strings.Contains(post.Dislikes, username) { // checks if the user has disliked the post
 		// removes user from dislikes string
 		post.Dislikes = strings.ReplaceAll(post.Dislikes, username+",", "")
 		post.NetRating += 1
+		originalposter.UpvoteCount += 1
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "You have not rated this post!"})
+		return
+	}
+
+	if err := models.DB.Save(&originalposter).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update upvote count of orginal poster!"})
 		return
 	}
 
