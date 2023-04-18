@@ -16,7 +16,7 @@ USE THIS WHENEVER MAKING LITTLE POSTCARDS LIKE ON THE HOMEPAGE
 
 export default function PostCard(props: {post: Post, color: string}) {
 
-    const [upvotes, setUpvotes] = useState<number>(props.post.netrating);
+    const [upvotes, setUpvotes] = useState<number>(props.post.netRating);
 
     const clearUpvotes = () => {
         const token = authService.getToken();
@@ -29,6 +29,7 @@ export default function PostCard(props: {post: Post, color: string}) {
                 ).then((res) => {
                     if (res.status === 200) {
                         console.log("cleared the users upvote");
+                        setUpvotes(res.data.data.netRating);
                     }
                     else {
                         console.log("failed to clear the users upvote. Not upvoted");
@@ -40,8 +41,8 @@ export default function PostCard(props: {post: Post, color: string}) {
     }
 
     const handleUpvote = () => {
+        console.log(props.post);
         const token = authService.getToken();
-        console.log("tok 2" + token)
         if (token !== null) {
             const headers = { headers: {'Authorization': `Bearer ${token}`} }
             axios.patch(
@@ -112,12 +113,12 @@ export default function PostCard(props: {post: Post, color: string}) {
                 <div>
                     <p className="font-light w-5/6">{props.post.body.slice(0, 50) + "..."}</p>
                 </div>
-                <div className='top-0 right-0'>
+                <div className='absolute top-0 right-0'>
                     {upvotes}
                     <button onClick={() => handleUpvote()}>⬆</button>
                     <button onClick={() => handleDownvote()}>⬇</button>
                 </div>
-                <div className='bottom-0 right-0 font-thin italic'>
+                <div className='absolute bottom-0 right-0 font-thin italic'>
                     {props.post.user} 
                 </div>
             </div>

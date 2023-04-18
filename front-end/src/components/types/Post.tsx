@@ -7,7 +7,7 @@ interface Post {
     user: string;
     likes: string;
     dislikes: string;
-    netrating: number;
+    netRating: number;
 }
 
 export type { Post }

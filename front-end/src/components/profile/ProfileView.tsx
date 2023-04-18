@@ -80,11 +80,6 @@ export default function ProfileView(props: {loggedIn: boolean, setLoggedIn: Func
                             <div>
                                 <p className="font-light w-5/6">{post.body.slice(0, 50) + "..."}</p>
                             </div>
-                            <div className='absolute top-0 right-0'>
-                                +1
-                                <button>⬆</button>
-                                <button>⬇</button>
-                            </div>
                             <div className='absolute bottom-0 right-0 font-thin italic'>
                                 <br/><button data-cy={"post-delete-" + post.title} onClick={() => handleDeletePost(post.id)} className="bg-orange-400 w-14 rounded overflow-hidden shadow-lg">Delete</button>
                             </div>

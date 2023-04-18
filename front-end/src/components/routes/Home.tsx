@@ -91,7 +91,7 @@ export default function Home(props: {loggedIn: boolean}) {
     return (
         <div className='flex flex-col overflow-hidden h-full p-2'>
             <div className="max-w-7xl mx-auto grid grid-cols-12 gap-2 h-full overflow-hidden">
-            <div className="col-span-4 h-full overflow-y-auto">
+                <div className="col-span-4 h-full overflow-y-auto">
                     <div data-cy="recents-tab" className="text-center text-xl font-bold">
                         Recents
                     </div>
