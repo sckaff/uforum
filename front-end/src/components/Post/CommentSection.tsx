@@ -114,6 +114,15 @@ export default function CommentSectionNew(props: {postID: number}) {
             )
         }
     }
+    const updateCommentList = () => {
+        if (comments.length === 0){
+            return (
+                <div className="text-center text-gray-500">No comments yet!</div>
+            )
+        } else {
+            return commentList;
+        }
+    }
     const commentList = comments.map((comment) => {
         return (
             <div key={comment.id} className="relative min-w-96 rounded overflow-hidden border-2 p-3">
@@ -149,7 +158,7 @@ export default function CommentSectionNew(props: {postID: number}) {
             </div>
             <div>
                 <p data-cy="comment-title" className="text-lg font-sans font-bold mx-3">Comments:</p>
-                {commentList}
+                {updateCommentList()}
             </div>
         </div>
     )
