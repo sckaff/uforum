@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Comment } from "../types/Comment";
+import CommentCard from "./CommentCard";
 import authService from "../../services/auth.service";
 import axios from "axios";
 
@@ -87,40 +88,9 @@ export default function CommentSectionNew(props: {postID: number}) {
             setError(true);
         }
     }
-    const handleDelete = (id: number) => {
-        const token = authService.getToken();
-        const headers = {
-            headers: { 
-                'Authorization': `Bearer ${token}`,
-            }
-        }
-        axios.delete("http://localhost:8080/user/deletecomment/" + id, headers)
-        .then((res) => {
-            console.log(res);
-            if (res.status === 200) {
-                console.log("Post deleted");
-                setComments(comments.filter((comment) => comment.id !== id));
-            }
-        });
-    }
-    const deleteButton = (user: String, id: number, body: String) => {
-        if (user === userName) {
-            return (
-                <button data-cy={`comment-delete-${body}`} className="absolute bottom-2 right-2" onClick={() => handleDelete(id)}>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-            )
-        }
-    }
     const commentList = comments.map((comment) => {
         return (
-            <div key={comment.id} className="relative min-w-96 rounded overflow-hidden border-2 p-3">
-                <div className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{comment.user}</div>
-                <div data-cy={"comment-" + comment.body}>{comment.body}</div>
-                {deleteButton(comment.user, comment.id, comment.body)}
-            </div>
+            <CommentCard key={comment.id} comment={comment} comments={comments} setComments={setComments} userName={userName}/>
         )
     });
 

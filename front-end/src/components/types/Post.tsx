@@ -5,6 +5,9 @@ interface Post {
     body: string;
     category: string;
     user: string;
+    likes: string;
+    dislikes: string;
+    netrating: number;
 }
 
 export type { Post }

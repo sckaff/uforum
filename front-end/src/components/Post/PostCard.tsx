@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Post } from '../types/Post';
+import axios from 'axios';
+import authService from '../../services/auth.service';
 
 /*
 USE THIS WHENEVER MAKING LITTLE POSTCARDS LIKE ON THE HOMEPAGE
@@ -13,6 +15,89 @@ USE THIS WHENEVER MAKING LITTLE POSTCARDS LIKE ON THE HOMEPAGE
 
 
 export default function PostCard(props: {post: Post, color: string}) {
+
+    const [upvotes, setUpvotes] = useState<number>(props.post.netrating);
+
+    const clearUpvotes = () => {
+        const token = authService.getToken();
+        if (token !== null) {
+            const headers = { headers: {'Authorization': `Bearer ${token}`} }
+            axios.patch(
+                    `http://localhost:8080/user/clearrating/${props.post.id}`,
+                    {},
+                    headers
+                ).then((res) => {
+                    if (res.status === 200) {
+                        console.log("cleared the users upvote");
+                    }
+                    else {
+                        console.log("failed to clear the users upvote. Not upvoted");
+                    }
+            });
+        } else {
+            console.log('Not logged in');
+        }
+    }
+
+    const handleUpvote = () => {
+        const token = authService.getToken();
+        console.log("tok 2" + token)
+        if (token !== null) {
+            const headers = { headers: {'Authorization': `Bearer ${token}`} }
+            axios.patch(
+                    `http://localhost:8080/user/likepost/${props.post.id}`,
+                    {},
+                    headers
+                ).then((res) => {
+                    if (res.status === 200) {
+                        setUpvotes(upvotes + 1)
+                    }
+                    else {
+                        clearUpvotes();
+                    }
+            }).catch((err) => {
+                if(err.response.status === 400)
+                {
+                    clearUpvotes();
+                }
+                else {
+                    console.log(err.response.status);
+                }   
+            });
+        } else {
+            console.log('Not logged in');
+        }
+    }
+
+    const handleDownvote = () => {
+        const token = authService.getToken();
+        if (token !== null) {
+            const headers = { headers: {'Authorization': `Bearer ${token}`} }
+            axios.patch(
+                    `http://localhost:8080/user/dislikepost/${props.post.id}`,
+                    {},
+                    headers
+                ).then((res) => {
+                    if (res.status === 200) {
+                        setUpvotes(upvotes - 1)
+                    }
+                    else {
+                        clearUpvotes();
+                    }
+            }).catch((err) => {
+                if(err.response.status === 400)
+                {
+                    clearUpvotes();
+                }
+                else {
+                    console.log(err.response.status);
+                }
+            });
+        } else {
+            console.log('Not logged in');
+        }
+    }
+
     const post_url = '/posts/' + props.post.id;
     return (
         <div data-cy={"post-" + props.post.title} key={props.post.id} className={"rounded shadow-lg m-2 border-2 " + props.color}>
@@ -27,12 +112,12 @@ export default function PostCard(props: {post: Post, color: string}) {
                 <div>
                     <p className="font-light w-5/6">{props.post.body.slice(0, 50) + "..."}</p>
                 </div>
-                <div className='absolute top-0 right-0'>
-                    +1
-                    <button>⬆</button>
-                    <button>⬇</button>
+                <div className='top-0 right-0'>
+                    {upvotes}
+                    <button onClick={() => handleUpvote()}>⬆</button>
+                    <button onClick={() => handleDownvote()}>⬇</button>
                 </div>
-                <div className='absolute bottom-0 right-0 font-thin italic'>
+                <div className='bottom-0 right-0 font-thin italic'>
                     {props.post.user} 
                 </div>
             </div>
