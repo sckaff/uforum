@@ -86,6 +86,7 @@ export default function Home(props: {loggedIn: boolean}) {
                 <PostCard post={posts[posts.length - j]} color={outline_color}/>
             )
         }
+        else return (null);
     })
 
     return (

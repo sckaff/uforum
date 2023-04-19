@@ -50,7 +50,7 @@ export default function CommentSectionNew(props: {postID: number}) {
         .catch((err) => {
             console.log("Error: " + err);
         });
-    }, []);
+    }, [props.postID, userName]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

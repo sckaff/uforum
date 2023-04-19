@@ -1,20 +1,13 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useState } from "react";
 import AuthService from "../../services/auth.service";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom"; 
-
-interface AuthContextType {
-    username: string;
-    password: string;
-    accessToken: string;
-}
 
 export default function Login(props: {loggedIn: boolean, setLoggedIn: Function}) {
 
     let navigate = useNavigate();
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [error, setError] = useState<boolean>(true);
     const [inputOneClassName, setInputOneClassName] = useState<string>("text-sm text-gray-base w-full mr-3 py-5 px-11 h-2 border border-gray-200 rounded mb-2 overflow-hidden shadow-lg");
     const [errorMsgClassName, setErrorMsgClassName] = useState<string>("flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-10 invisible");
 
@@ -28,13 +21,11 @@ export default function Login(props: {loggedIn: boolean, setLoggedIn: Function})
             .then((res) => {
                 console.log(res);
                 if (res.token) {
-                    setError(false);
                     props.setLoggedIn(true);
                     navigate("/profile");
                 }
             })
             .catch((err) => {
-                setError(true);
                 console.log(err);
                 setInputOneClassName("text-sm text-gray-base w-full mr-3 py-5 px-11 h-2 border border-gray-200 rounded mb-2 overflow-hidden shadow-lg border-red-500");
                 setErrorMsgClassName("flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-10 visible");

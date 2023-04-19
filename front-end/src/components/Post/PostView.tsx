@@ -15,7 +15,7 @@ export default function PostView() {
                 let post_data: Post = json.data;
                 setPost(post_data);
             });
-    }, []);
+    }, [id]);
 
 
     if (post === undefined) {
