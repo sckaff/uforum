@@ -36,11 +36,10 @@ func main() {
 	r.GET("/categories", controllers.GetCategories)                        //Grab list of categories
 	r.GET("/users", controllers.GetUsers)                                  //Grab list of users
 	r.GET("/getpostsbycategory/:category", controllers.GetPostsByCategory) //Grab all posts by category
-	//remember to capitalize category name
 
-	r.POST("/register", controllers.Register) //Register new user
-	r.POST("/login", controllers.Login)       //Login user
-	//r.POST("/categories", controllers.CreateCategory)              //Create new category (SHOULD BE ADMIN ONLY ONCE IMPLEMENTED)
+	r.POST("/register", controllers.Register)                      //Register new user
+	r.POST("/login", controllers.Login)                            //Login user
+	r.POST("/categories", controllers.CreateCategory)              //Create new category (SHOULD BE ADMIN ONLY ONCE IMPLEMENTED)
 	r.GET("/getcomments/:postid", controllers.GetCommentsByPostID) //Grab all comments by post
 
 	r.PATCH("/addadmin/:id", controllers.SetUserAsAdmin) //Set user as admin (SHOULD BE ADMIN ONLY ONCE IMPLEMENTED)
@@ -65,8 +64,6 @@ func main() {
 	//admin.DELETE("/deleteuser/:id", controllers.AdminDeleteUser) //Delete a user(in progress)
 	admin.POST("createcategory", controllers.CreateCategory)   //Create new category (admin only)
 	admin.PATCH("/editcategory/:id", controllers.EditCategory) //Edit a category (admin only)
-
-	//would deleting a user delete all their posts and comments?
 
 	r.Run()
 }

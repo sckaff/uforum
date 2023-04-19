@@ -1,16 +1,32 @@
 # Sprint 3
 ## Detailed Work Done
 ### Front End
-
+- Re-iterated the design to look more clean and finished
+- Implemented comments along with posts for each post cell
+- Added an upvote-downvote system on each cell in the home-page
+- Re-iteraded the login and made a functional register page
+- Implemented the user's profile view page
+- Implemented efficient search tasks, by post title or category
 
 ### Back End
-
+- Created categories for each post
+- Created Admin-specific functions to moderate UForum
+- Created a profile view variant for front-end
+- Implemented post rating feature by means of upvoting and downvoting
+- Created a comment schema on database and implemented comments on posts
+- Implemented a filter search of post categories 
 
 ## Front End Unit/End To End Tests
-
-
+TODO
 ## Back End Unit Tests
-
+- GetPosts
+- GetUsers
+- Login
+- Register
+- GetPostByID
+- GetProfile (NEW)
+- PatchUpvote (NEW) 
+- PostComment (NEW)
 
 ## Video Link
 TODO

@@ -8,6 +8,8 @@
     - Grab list of posts' categories
 * GetUsers()
     - Grab lists of all users
+* GetPostsByCategory
+    - Grab lists of all posts within a specific category
 * Register()
     - Registers a new user
 * Login()
@@ -16,6 +18,8 @@
     - Get all posts from a given category
 * GetCommentsByPostID
     - Get all comments from a post by a given post id
+* CreateCategory
+    - Create a new category (SERVER ONLY)
 ---
 ## User Functions:
 * GetUserPosts()
@@ -50,5 +54,4 @@
     - Has the same functionality as DeleteCommen() but only the admin can access this function and can delete any comment.
 * SetUserAsAdmin()
     - Gives a user admin status. For now the method does not require admin access.
-
 ---
