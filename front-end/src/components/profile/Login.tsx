@@ -56,7 +56,7 @@ export default function Login(props: {loggedIn: boolean, setLoggedIn: Function})
                         <input className={inputOneClassName} data-cy="username-input" id="username" type="text" value={username} placeholder="Username" onChange={(e) => setUsername(e.target.value)} required/> <br/>
                         <input className={inputOneClassName} data-cy="password-input" id="password" type="password" value={password} placeholder="Password" onChange={(e) => {setPassword(e.target.value)}} required/><br/>
                         <div className={errorMsgClassName}>Username or Password was Incorrect!</div>
-                        <button className="bg-orange-400 w-full mt-4 rounded mb-2 overflow-hidden shadow-lg" data-cy="submit-button" type="submit">Login</button><br/>
+                        <button className="bg-orange-400 w-full mt-4 rounded mb-2 overflow-hidden shadow-lg" data-cy="submit-button" data-testid="loginBtn" type="submit">Login</button><br/>
                         <br/>
                         <div className="footer block text-sm font-medium leading-6 text-gray-900 flex justify-center">
                             <Link to="/profile/register">

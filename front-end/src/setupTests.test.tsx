@@ -32,7 +32,7 @@ test('Testing Login Page Details', () => {
 
   render(
     <BrowserRouter>
-    <Login loggedIn={false} setLoggedIn={null}/>
+    <Login loggedIn={false} setLoggedIn={() => {}}/>
     </BrowserRouter>
   );
   
