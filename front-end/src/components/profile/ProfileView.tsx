@@ -96,7 +96,6 @@ export default function ProfileView(props: {loggedIn: boolean, setLoggedIn: Func
                             <div className="h-54 rounded shadow-lg m-2 border-2 p-2 border-sky-500">
                                 <div className="font-sans">Username: {username}</div><br/>
                                 <div className="font-sans">Email: {email}</div><br/>
-                                <div className="font-sans">Upvote Count: ??? </div><br/>
                                 <div className="font-sans">Member Since: {creationDate.slice(0, 10)} </div><br/>
                                 <button onClick={handleLogoutButton} className="bottom-0 left-0 bg-orange-400 w-14 rounded overflow-hidden shadow-lg m-2">Logout</button>
                             </div>

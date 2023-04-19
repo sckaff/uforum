@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Post } from "../types/Post";
 import { useParams } from "react-router-dom";
 import CommentSection from "./CommentSection";
+import authService from '../../services/auth.service';
+import axios from 'axios';
 
 export default function PostView() {
 
     const [post, setPost] = useState<Post>();
     const { id } = useParams<{ id: string }>();
     
+
     useEffect(() => {
         fetch('http://localhost:8080/posts/' + id)
             .then((res) => res.json())
@@ -39,11 +42,6 @@ export default function PostView() {
                             <div className="text-lg font-sans italic inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
                                 {post.category}
                             </div>
-                        </div>
-                        <div className="absolute top-0 right-0 m-3">
-                                +1
-                                <button>⬆</button>
-                                <button>⬇</button>
                         </div>
                         <div className="text-lg font-sans ml-3">
                             {post.body}
