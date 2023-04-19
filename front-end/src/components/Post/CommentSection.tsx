@@ -119,7 +119,7 @@ export default function CommentSectionNew(props: {postID: number}) {
             </div>
             <div>
                 <p data-cy="comment-title" className="text-lg font-sans font-bold mx-3">Comments:</p>
-                {commentList}
+                {comments.length === 0 ? <div className="flex items-center justify-center font-medium tracking-wide text-gray-400 text-s">No comments yet!</div> : commentList}
             </div>
         </div>
     )
