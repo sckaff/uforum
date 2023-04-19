@@ -25,13 +25,9 @@ go mod tidy
 
 3. Run both front-end and back-end in separate terminals
 #### **Front-End**
-```
-npm run start
-```
+![front.gif](./img/front.gif)
 #### **Back-End**
-```
-go run .
-```
+![back.gif](./img/back.gif)
 This will start the server and make it available at http://localhost:3000.
 
 ## **Features**
