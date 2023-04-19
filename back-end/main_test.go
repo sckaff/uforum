@@ -4,10 +4,12 @@ import (
 	"bytes"
 	"cen/backend/controllers"
 	"cen/backend/models"
+	"cen/backend/utils/token"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/gin-gonic/gin"
@@ -123,7 +125,6 @@ func TestRegister(t *testing.T) {
 
 	ts := httptest.NewServer(r)
 
-	// Test case 1: successful registration
 	input := controllers.RegisterInput{
 		Username: "joesamcat",
 		Password: "fernandoscat",
@@ -139,25 +140,6 @@ func TestRegister(t *testing.T) {
 		t.Fatal(err)
 	}
 	assert.Equal(t, http.StatusOK, res.StatusCode, "OK response is expected")
-
-	// Test case 2: registration with existing username
-	// [TEST AFTER USERNAME IS UNIQUE. IT IS NOT CURRENTLY UNIQUE. NEITHER EMAIL.]
-	//
-	// input = controllers.RegisterInput{
-	// 	Username: "fernando",
-	// 	Password: "fernando",
-	// 	Email:    "fernando@ufl.edu",
-	// }
-
-	// payload, err = json.Marshal(input)
-	// if err != nil {
-	// 	t.Fatal(err)
-	// }
-	// res, err = http.Post(ts.URL+"/register", "application/json", bytes.NewBuffer(payload))
-	// if err != nil {
-	// 	t.Fatal(err)
-	// }
-	// assert.Equal(t, http.StatusBadRequest, res.StatusCode, "Bad Request response is expected")
 }
 
 func TestGetPostByID(t *testing.T) {
@@ -177,84 +159,117 @@ func TestGetPostByID(t *testing.T) {
 	assert.Equal(t, http.StatusOK, res.StatusCode, "OK response is expected")
 }
 
-// func TestCreatePost(t *testing.T) {
-// 	// Connect to the database
-// 	models.ConnectDatabase()
+func TestCreateComment(t *testing.T) {
+	models.ConnectDatabase()
 
-// 	// Create a new Gin router
-// 	r := gin.Default()
-// 	r.Use(CORSMiddleware())
+	// Create a new post to comment on
+	post := models.Post{Title: "Test Post", Body: "This is a test post body."}
+	models.DB.Create(&post)
 
-// 	// Define the "/posts" endpoint with the CreatePost controller function
-// 	r.POST("/posts", controllers.CreatePost)
+	// Create a new user to associate with the comment
+	user := models.User{Username: "testuser", Password: "testpassword"}
+	models.DB.Create(&user)
 
-// 	// Start a new test server
-// 	ts := httptest.NewServer(r)
+	// Generate a JWT token for the user
+	tokenString, err := token.GenerateToken(user.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-// 	// Log in as a user and get a valid JWT token
-// 	loginInput := controllers.LoginInput{
-// 		Username: "fernando",
-// 		Password: "fernando",
-// 	}
-// 	loginPayload, err := json.Marshal(loginInput)
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
+	// Create a new comment to add to the post
+	commentInput := controllers.CreateCommentInput{Body: "This is a test comment body.", PostID: post.ID}
+	commentPayload, err := json.Marshal(commentInput)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-// 	loginRes, err := http.Post(ts.URL+"/login", "application/json", bytes.NewBuffer(loginPayload))
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
-// 	assert.Equal(t, http.StatusOK, loginRes.StatusCode, "OK response is expected")
+	// Create a new request with the JWT token and comment payload
+	req, err := http.NewRequest("POST", "/comments", bytes.NewBuffer(commentPayload))
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", tokenString))
 
-// 	var loginResData struct {
-// 		Token string `json:"token"`
-// 	}
-// 	err = json.NewDecoder(loginRes.Body).Decode(&loginResData)
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
+	// Perform the request
+	r := gin.Default()
+	r.POST("/comments", controllers.CreateComment)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
 
-// 	// Create a new post payload
-// 	postInput := controllers.CreatePostInput{
-// 		Title:    "Test Post",
-// 		Body:     "This is a test post",
-// 		Category: "testing",
-// 	}
-// 	postPayload, err := json.Marshal(postInput)
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
+	// Check that the response is successful
+	assert.Equal(t, http.StatusOK, w.Code, "OK response is expected")
 
-// 	// Create a new HTTP request with the JWT token and post payload
-// 	req, err := http.NewRequest("POST", ts.URL+"/posts", bytes.NewBuffer(postPayload))
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
-// 	req.Header.Set("Authorization", "Bearer "+loginResData.Token)
-// 	req.Header.Set("Content-Type", "application/json")
+	// Check that the response contains the created comment
+	var resData struct {
+		Data models.Comment `json:"data"`
+	}
+	err = json.Unmarshal(w.Body.Bytes(), &resData)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.Equal(t, commentInput.Body, resData.Data.Body, "Comment body should match the input")
+	assert.Equal(t, user.Username, resData.Data.User, "Comment should be associated with the correct user")
+	assert.Equal(t, post.ID, resData.Data.PostID, "Comment should be associated with the correct post")
+}
 
-// 	// Make the request and check the response
-// 	client := &http.Client{}
-// 	res, err := client.Do(req)
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
-// 	assert.Equal(t, http.StatusOK, res.StatusCode, "OK response is expected")
+func TestLikePost(t *testing.T) {
+	models.ConnectDatabase()
 
-// 	var resData struct {
-// 		ID       uint   `json:"id"`
-// 		Title    string `json:"title"`
-// 		Body     string `json:"description"`
-// 		Category string `json:"category"`
-// 	}
-// 	err = json.NewDecoder(res.Body).Decode(&resData)
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
+	// Create a new user to associate with the post
+	user := models.User{Username: "testuser", Password: "testpassword"}
+	models.DB.Create(&user)
 
-// 	assert.NotZero(t, resData.ID, "Post ID should not be zero")
-// 	assert.Equal(t, postInput.Title, resData.Title, "Post title should match")
-// 	assert.Equal(t, postInput.Body, resData.Body, "Post description should match")
-// 	assert.Equal(t, postInput.Category, resData.Category, "Post category should match")
-// }
+	// Generate a JWT token for the user
+	tokenString, err := token.GenerateToken(user.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Create a new post to like
+	post := models.Post{Title: "Test Post", Body: "This is a test post body.", User: user.Username}
+	models.DB.Create(&post)
+
+	// Create a request to like the post
+	req, err := http.NewRequest("POST", fmt.Sprintf("/posts/%d/like", post.ID), nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", tokenString))
+
+	// Perform the request
+	r := gin.Default()
+	r.POST("/posts/:id/like", controllers.LikePost)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	// Check that the response is successful
+	assert.Equal(t, http.StatusOK, w.Code, "OK response is expected")
+
+	// Check that the post was liked
+	var resData struct {
+		Data models.Post `json:"data"`
+	}
+	err = json.Unmarshal(w.Body.Bytes(), &resData)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.True(t, strings.Contains(resData.Data.Likes, user.Username), "User should have liked the post")
+}
+
+func TestGetCategories(t *testing.T) {
+
+	models.ConnectDatabase()
+
+	r := gin.Default()
+	r.Use(CORSMiddleware())
+	r.GET("/categories", controllers.GetCategories)
+
+	ts := httptest.NewServer(r)
+
+	res, err := http.Get(ts.URL + "/categories")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, http.StatusOK, res.StatusCode, "OK response is expected")
+}

@@ -40,9 +40,8 @@ func main() {
 	r.POST("/register", controllers.Register)                      //Register new user
 	r.POST("/login", controllers.Login)                            //Login user
 	r.POST("/categories", controllers.CreateCategory)              //Create new category (SHOULD BE ADMIN ONLY ONCE IMPLEMENTED)
-	r.GET("/getcomments/:postid", controllers.GetCommentsByPostID) //Grab all comments by post
-
-	r.PATCH("/addadmin/:id", controllers.SetUserAsAdmin) //Set user as admin (SHOULD BE ADMIN ONLY ONCE IMPLEMENTED)
+	r.GET("/getcomments/:postid", controllers.GetCommentsByPostID) //Grab all comments by post id
+	r.PATCH("/addadmin/:id", controllers.SetUserAsAdmin)           //Set user as admin (SHOULD BE ADMIN ONLY ONCE IMPLEMENTED)
 
 	user := r.Group("/user")
 	user.Use(middlewares.JwtAuthMiddleware())
@@ -61,9 +60,8 @@ func main() {
 	admin := user.Group("/admin")
 	admin.DELETE("/deletepost/:id", controllers.AdminDeletePost)       //Delete a post (admin only)
 	admin.DELETE("/deletecomment/:id", controllers.AdminDeleteComment) //Delete a comment (admin only)
-	//admin.DELETE("/deleteuser/:id", controllers.AdminDeleteUser) //Delete a user(in progress)
-	admin.POST("createcategory", controllers.CreateCategory)   //Create new category (admin only)
-	admin.PATCH("/editcategory/:id", controllers.EditCategory) //Edit a category (admin only)
+	admin.POST("createcategory", controllers.CreateCategory)           //Create new category (admin only)
+	admin.PATCH("/editcategory/:id", controllers.EditCategory)         //Edit a category (admin only)
 
 	r.Run()
 }

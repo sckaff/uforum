@@ -24,9 +24,9 @@ TODO
 - Login
 - Register
 - GetPostByID
-- GetProfile (NEW)
-- PatchUpvote (NEW) 
-- PostComment (NEW)
+- LikePost
+- CreateComment
+- GetCategories
 
 ## Video Link
 TODO
