@@ -16,7 +16,7 @@
     - Get all posts from a given category
 * GetCommentsByPostID
     - Get all comments from a post by a given post id
-
+---
 ## User Functions:
 * GetUserPosts()
     - Grab all the user's posts
@@ -38,7 +38,7 @@
     - Dislikes a post. The user is recorded as a username in the post's dislike list
 * ClearPostLikes()
     - Clears any rating a user has made on a post.
-
+---
 ## Admin Functions:
 * CreateCategory()
     - Creates a category. Only an admin can create a category.
@@ -52,24 +52,3 @@
     - Gives a user admin status. For now the method does not require admin access.
 
 ---
-
-# Initializing the server:
-## First time:
-INITIALIZE ENVIRONMENT:
-    `go mod init example/server-folder/`
-
-AFTER IMPORTING PACKAGES:
-    `go get .`
-
-## Recurrent:
-START SERVER: \
-    `go mod tidy` \
-    `go run main.go`
-
----
-
-# Sqlite3 
-INSTALL:
-    `sudo port install sqlite3`
-OPEN:
-    `sqlite3 uforum.db`
