@@ -4,7 +4,7 @@
 - Added an upvote-downvote system on each cell in the home-page
 - Re-iterated the overall design to look more clean and finished (Home Page, Search UI, Profile, Login/Register, Post Cards, Post Pages, Create Post Page)
 - Reworked home page to have proper functionality as per design (Events tab holds events, Recents tab holds recents)
-- Categories tabs on front end navigate to category tabs
+- Categories tabs on home page navigate to category tabs
 - Created delete button for comments
 - Added more apparent and modern warning indications/messages for the UI
 
