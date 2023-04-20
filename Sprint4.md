@@ -10,10 +10,10 @@
 
 ### Back End
 - Created categories for each post
-- Created Admin-specific functions to moderate UForum
+- Finished Admin-specific functions to moderate UForum
 - Created a profile view variant for front-end
 - Implemented post rating feature by means of upvoting and downvoting
-- Created a comment schema on database and implemented comments on posts
+- Finished a comment schema on database and implemented comments on posts
 - Implemented a filter search of post categories 
 
 ## Front End Unit/End To End Tests
