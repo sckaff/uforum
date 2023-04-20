@@ -8,17 +8,15 @@
     - Grab list of posts' categories
 * GetUsers()
     - Grab lists of all users
-* GetPostsByCategory
+* GetPostsByCategory()
     - Grab lists of all posts within a specific category
 * Register()
     - Registers a new user
 * Login()
     - Performs a sucessful login if credentials are right, outputs an error message otherwise
-* GetPostsByCategory()
-    - Get all posts from a given category
-* GetCommentsByPostID
+* GetCommentsByPostID()
     - Get all comments from a post by a given post id
-* CreateCategory
+* CreateCategory()
     - Create a new category (SERVER ONLY)
 ---
 ## User Functions:
