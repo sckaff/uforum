@@ -8,6 +8,8 @@
     - Grab list of posts' categories
 * GetUsers()
     - Grab lists of all users
+* GetPostsByCategory
+    - Grab lists of all posts within a specific category
 * Register()
     - Registers a new user
 * Login()
@@ -16,7 +18,9 @@
     - Get all posts from a given category
 * GetCommentsByPostID
     - Get all comments from a post by a given post id
-
+* CreateCategory
+    - Create a new category (SERVER ONLY)
+---
 ## User Functions:
 * GetUserPosts()
     - Grab all the user's posts
@@ -38,7 +42,7 @@
     - Dislikes a post. The user is recorded as a username in the post's dislike list
 * ClearPostLikes()
     - Clears any rating a user has made on a post.
-
+---
 ## Admin Functions:
 * CreateCategory()
     - Creates a category. Only an admin can create a category.
@@ -47,29 +51,7 @@
 * AdminDeletePost()
     - Has the same functionality as DeletePost() but only the admin can access this function and can delete any post.
 * AdminDeleteComment()
-    - Has the same functionality as DeleteCommen() but only the admin can access this function and can delete any comment.
+    - Has the same functionality as DeleteComment() but only the admin can access this function and can delete any comment.
 * SetUserAsAdmin()
-    - Gives a user admin status. For now the method does not require admin access.
-
+    - Gives a user admin status.
 ---
-
-# Initializing the server:
-## First time:
-INITIALIZE ENVIRONMENT:
-    `go mod init example/server-folder/`
-
-AFTER IMPORTING PACKAGES:
-    `go get .`
-
-## Recurrent:
-START SERVER: \
-    `go mod tidy` \
-    `go run main.go`
-
----
-
-# Sqlite3 
-INSTALL:
-    `sudo port install sqlite3`
-OPEN:
-    `sqlite3 uforum.db`
