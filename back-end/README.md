@@ -53,5 +53,5 @@
 * AdminDeleteComment()
     - Has the same functionality as DeleteCommen() but only the admin can access this function and can delete any comment.
 * SetUserAsAdmin()
-    - Gives a user admin status. For now the method does not require admin access.
+    - Gives a user admin status.
 ---
