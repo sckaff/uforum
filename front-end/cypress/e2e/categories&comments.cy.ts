@@ -15,7 +15,7 @@ describe('testing comments/categories', () => {
     cy.wait(wait_time);
     cy.get('[data-cy=category-Nightlife]').click();
     cy.wait(wait_time);
-    cy.get('[data-cy=post-title-gators]').click();
+    cy.get('[data-cy=post-gators]').click();
     cy.wait(wait_time);
     cy.get('[data-cy=comment-input]').type('YAYAYAYAYAY');
     cy.wait(wait_time);

@@ -110,7 +110,7 @@ export default function CommentSectionNew(props: {postID: number}) {
     return (
         <div className="p-2">
             <div>
-                <p data-cy="comment-title" className="text-lg font-sans font-bold ml-3 mt-1">Create a comment:</p>
+                <p className="text-lg font-sans font-bold ml-3 mt-1">Create a comment:</p>
                 <form onSubmit={handleSubmit}>
                     {dispError()}
                     <textarea className={commentInputBox} data-cy="comment-input" id="body" value={body} rows={4} placeholder="Comment" onChange={(e) => setBody(e.target.value)} required/><br/>

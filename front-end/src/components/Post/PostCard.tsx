@@ -101,11 +101,11 @@ export default function PostCard(props: {post: Post, color: string}) {
 
     const post_url = '/posts/' + props.post.id;
     return (
-        <div data-cy={"post-" + props.post.title} key={props.post.id} className={"rounded shadow-lg m-2 border-2 " + props.color}>
+        <div key={props.post.id} className={"rounded shadow-lg m-2 border-2 " + props.color}>
             <div className='relative m-2'>
                 <div className="">                        
                     <React.Fragment>
-                        <Link data-cy={`post-title-${props.post.title}`} to={post_url}>
+                        <Link data-cy={`post-${props.post.title}`} to={post_url}>
                             <p className='url_styling text-lg font-semibold w-5/6'>{props.post.title}</p>
                         </Link>
                     </React.Fragment>
