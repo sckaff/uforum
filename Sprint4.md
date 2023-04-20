@@ -1,12 +1,12 @@
 # Sprint 4
 ## Detailed Work Done
 ### Front End
-- Re-iterated the design to look more clean and finished
-- Implemented comments along with posts for each post cell
 - Added an upvote-downvote system on each cell in the home-page
-- Re-iteraded the login and made a functional register page
-- Implemented the user's profile view page
-- Implemented efficient search tasks, by post title or category
+- Re-iterated the overall design to look more clean and finished (Home Page, Search UI, Profile, Login/Register, Post Cards, Post Pages, Create Post Page)
+- Reworked home page to have proper functionality as per design (Events tab holds events, Recents tab holds recents)
+- Categories tabs on front end navigate to category tabs
+- Created delete button for comments
+- Added more apparent and modern warning indications/messages for the UI
 
 ### Back End
 - Created categories for each post
