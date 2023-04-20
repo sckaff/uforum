@@ -17,7 +17,10 @@
 - Implemented a filter search of post categories 
 
 ## Front End Unit/End To End Tests
-TODO
+- New e2e test for categories and comment system
+- All unit cypress and e2e cypress tests updated around new ui layout
+- New jest unit test for login page functionality
+
 ## Back End Unit Tests
 - GetPosts
 - GetUsers
