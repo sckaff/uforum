@@ -51,7 +51,7 @@
 * AdminDeletePost()
     - Has the same functionality as DeletePost() but only the admin can access this function and can delete any post.
 * AdminDeleteComment()
-    - Has the same functionality as DeleteCommen() but only the admin can access this function and can delete any comment.
+    - Has the same functionality as DeleteComment() but only the admin can access this function and can delete any comment.
 * SetUserAsAdmin()
     - Gives a user admin status.
 ---
