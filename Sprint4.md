@@ -1,4 +1,4 @@
-# Sprint 3
+# Sprint 4
 ## Detailed Work Done
 ### Front End
 - Re-iterated the design to look more clean and finished
@@ -24,9 +24,9 @@ TODO
 - Login
 - Register
 - GetPostByID
-- LikePost
-- CreateComment
-- GetCategories
+- LikePost (NEW)
+- CreateComment (NEW)
+- GetCategories (NEW)
 
 ## Video Link
 TODO
